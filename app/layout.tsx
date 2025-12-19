@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import './globals.css' // Keep your global styles if you have them
+
+// We removed the globals.css line to fix the "Module not found" error
 
 export const metadata: Metadata = {
   title: 'A Digital Hug | Special Vibe Greeting',
@@ -28,8 +29,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{ margin: 0, padding: 0 }}>
-        {/* This "children" line is what allows your other pages to load! */}
+      <body style={{ margin: 0, padding: 0, overflowX: 'hidden' }}>
+        {/* This line is critical; it displays your sender, success, and receiver pages */}
         {children}
       </body>
     </html>
