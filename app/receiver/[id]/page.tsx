@@ -8,7 +8,6 @@ import { alphabetMap } from '../../data/alphabetMap';
 function GiftBoxTile({ word }: { word: string }) {
     const [isOpen, setIsOpen] = useState(false);
     
-    // Safety check: ensure first and last letters exist
     const firstL = word[0]?.toUpperCase() || '';
     const lastL = word[word.length - 1]?.toUpperCase() || '';
     const firstImg = alphabetMap[firstL] || '';
@@ -36,12 +35,12 @@ function GiftBoxTile({ word }: { word: string }) {
     );
 }
 
-// --- ACTUAL RECEIVER CONTENT ---
+// --- ACTUAL CONTENT COMPONENT ---
 function ReceiverContent() {
     const searchParams = useSearchParams();
     const [snow, setSnow] = useState<any[]>([]);
     
-    // This part catches "how about a dinner?" from your link!
+    // This looks at the link and finds "how about a dinner?"
     const displayMessage = searchParams.get('msg') || "Thinking of you!";
     const giftWordsString = searchParams.get('tiles') || "";
     const giftWords = giftWordsString.toLowerCase().split(',');
@@ -88,10 +87,10 @@ function ReceiverContent() {
     );
 }
 
-// --- MAIN PAGE EXPORT (The Vercel Fix) ---
+// --- WRAPPER FOR VERCEL SAFETY ---
 export default function ReceiverPage() {
     return (
-        <Suspense fallback={<div style={{color:'white', textAlign:'center', paddingTop:'20vh'}}>Loading your vibe...</div>}>
+        <Suspense fallback={<div>Loading your vibe...</div>}>
             <ReceiverContent />
         </Suspense>
     );
