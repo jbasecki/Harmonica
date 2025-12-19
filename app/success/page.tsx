@@ -1,14 +1,18 @@
 'use client';
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 function SuccessCard() {
     const searchParams = useSearchParams();
-    const msg = searchParams.get('msg') || '';
-    const tiles = searchParams.get('tiles') || '';
-    
-    // This matches the exact URL format in your screenshot
-    const shareUrl = `${window.location.origin}/receiver/vibe?msg=${msg}&tiles=${tiles}`;
+    const [shareUrl, setShareUrl] = useState('');
+
+    useEffect(() => {
+        const msg = searchParams.get('msg') || '';
+        const tiles = searchParams.get('tiles') || '';
+        // Exact URL format from your original magic
+        const url = `${window.location.origin}/receiver/vibe?msg=${msg}&tiles=${tiles}`;
+        setShareUrl(url);
+    }, [searchParams]);
 
     return (
         <main style={styles.container}>
@@ -36,12 +40,26 @@ function SuccessCard() {
 }
 
 export default function SuccessPage() {
-    return <Suspense><SuccessCard /></Suspense>;
+    return <Suspense fallback={<div>Loading...</div>}><SuccessCard /></Suspense>;
 }
 
+// Fixed styling with explicit TypeScript types
 const styles = {
-    container: { height: '100vh', width: '100vw', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'sans-serif' },
-    card: { background: 'white', padding: '50px 40px', borderRadius: '40px', border: '5px solid #ffd700', width: '90%', maxWidth: '550px', textAlign: 'center', boxShadow: '0 15px 35px rgba(0,0,0,0.1)' },
+    container: { 
+        height: '100vh', width: '100vw', background: '#f8f9fa', 
+        display: 'flex', alignItems: 'center', justifyContent: 'center', 
+        fontFamily: 'sans-serif' 
+    } as React.CSSProperties,
+    card: { 
+        background: 'white', padding: '50px 40px', borderRadius: '40px', 
+        border: '5px solid #ffd700', width: '90%', maxWidth: '550px', 
+        textAlign: 'center' as const, // This fixes the image_58d701 error
+        boxShadow: '0 15px 35px rgba(0,0,0,0.1)' 
+    } as React.CSSProperties,
     linkBox: { background: '#f0f2f5', padding: '20px', borderRadius: '15px', marginBottom: '30px' },
-    shareBtn: { width: '100%', background: '#ff6600', color: 'white', padding: '18px', borderRadius: '50px', border: 'none', fontSize: '1.2rem', fontWeight: 'bold', cursor: 'pointer' }
+    shareBtn: { 
+        width: '100%', background: '#ff6600', color: 'white', 
+        padding: '18px', borderRadius: '50px', border: 'none', 
+        fontSize: '1.2rem', fontWeight: 'bold', cursor: 'pointer' 
+    } as React.CSSProperties
 };
