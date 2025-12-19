@@ -1,6 +1,24 @@
-export const metadata = {
-  title: 'Vibe Letter',
-  description: 'Send a digital gift box vibe',
+import type { Metadata } from 'next'
+import './globals.css' // Keep your global styles if you have them
+
+export const metadata: Metadata = {
+  title: 'A Digital Hug | Special Vibe Greeting',
+  description: 'Someone sent you a secret winter vibe! Tap to unwrap your message.',
+  openGraph: {
+    title: 'A Digital Hug 🎉',
+    description: 'You have a secret winter message waiting...',
+    url: 'https://vibe-letter-final-clean.vercel.app',
+    siteName: 'Vibe Greeting Shop',
+    images: [
+      {
+        url: 'https://storage.googleapis.com/simple-bucket-27/A.png', 
+        width: 800,
+        height: 600,
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
 }
 
 export default function RootLayout({
@@ -10,7 +28,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{ margin: 0 }}>{children}</body>
+      <body style={{ margin: 0, padding: 0 }}>
+        {/* This "children" line is what allows your other pages to load! */}
+        {children}
+      </body>
     </html>
   )
 }
