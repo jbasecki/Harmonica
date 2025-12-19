@@ -11,12 +11,10 @@ const SCENES = [
     { id: 'ocean', name: 'Ocean' }, { id: 'forest', name: 'Forest' }
 ];
 
-/* --- SYMMETRICAL ALPHABET GIFT ART --- */
 function DoubleGift({ word }: { word: string }) {
     const first = word.charAt(0).toUpperCase();
     const last = word.charAt(word.length - 1).toUpperCase();
     const url = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l}.png`;
-
     return (
         <div style={{ display: 'inline-flex', gap: '8px', alignItems: 'center', margin: '0 10px' }}>
             <img src={url(first)} style={styles.alphabetBox} alt={first} />
@@ -35,6 +33,7 @@ export default function SenderPage() {
 
     const handleSend = async () => {
         try {
+            // This MUST match your file path: app/api/checkout/route.ts
             const res = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -44,8 +43,10 @@ export default function SenderPage() {
             if (data.id) {
                 const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
                 await stripe?.redirectToCheckout({ sessionId: data.id });
+            } else {
+                alert("Stripe session failed. Check your Vercel Environment Variables!");
             }
-        } catch (err) { console.error("Stripe Error", err); }
+        } catch (err) { console.error("Payment error", err); }
     };
 
     const toggleTile = (word: string) => {
@@ -56,12 +57,12 @@ export default function SenderPage() {
 
     return (
         <main style={styles.container}>
-            {/* UNMUTED CINEMATIC VIDEO */}
+            {/* RESTORED TO 'CONTAIN' TO SHOW TOP TEXT */}
             <video key={selectedScene.id} autoPlay loop playsInline style={styles.video}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
-            {/* TOP EDGE UI - MASKING LOGOS */}
+            {/* MASKING GRID AT THE VERY TOP EDGE */}
             <div style={styles.topLeftControls}>
                 <div style={styles.gridContainer}>
                     <div style={styles.videoGrid}>
@@ -69,7 +70,7 @@ export default function SenderPage() {
                             <button key={scene.id} onClick={() => setSelectedScene(scene)} style={{
                                 ...styles.gridItem,
                                 border: selectedScene.id === scene.id ? '2px solid gold' : '1px solid rgba(255,255,255,0.2)',
-                                background: selectedScene.id === scene.id ? 'rgba(255,215,0,0.4)' : 'rgba(0,0,0,0.85)'
+                                background: selectedScene.id === scene.id ? 'rgba(255,215,0,0.4)' : 'rgba(0,0,0,0.9)'
                             }}>
                                 {scene.name}
                             </button>
@@ -95,7 +96,7 @@ export default function SenderPage() {
                     </div>
                 ) : (
                     <div style={styles.editorCard}>
-                        <h2 style={{ color: '#ff4500', marginBottom: '10px' }}>Vibe Greeting Shop</h2>
+                        <h2 style={{ color: '#ff4500' }}>Vibe Greeting Shop</h2>
                         <p>Tap words to wrap them in a <b>gift</b>! 🎁</p>
                         <div style={styles.inputArea}>
                             {tokens.map((token, i) => {
@@ -104,8 +105,7 @@ export default function SenderPage() {
                                 return (
                                     <span key={i} onClick={() => toggleTile(token)} style={{
                                         ...styles.token,
-                                        background: isSelected ? '#ffd700' : 'transparent',
-                                        border: isSelected ? '1px solid #b8860b' : 'none'
+                                        background: isSelected ? '#ffd700' : 'transparent'
                                     }}>
                                         {token}
                                     </span>
@@ -128,14 +128,15 @@ export default function SenderPage() {
 
 const styles: { [key: string]: React.CSSProperties } = {
     container: { height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' },
-    video: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 },
+    // objectFit: 'contain' stops enlargement so top text is visible
+    video: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'contain', zIndex: 0 },
     topLeftControls: { position: 'absolute', top: '0', left: '0', zIndex: 100, display: 'flex', flexDirection: 'column', gap: '8px' },
-    eyeBtn: { width: '55px', height: '55px', borderRadius: '50%', background: 'rgba(255,255,255,0.95)', border: '2px solid gold', fontSize: '1.6rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '12px' },
+    eyeBtn: { width: '55px', height: '55px', borderRadius: '50%', background: 'rgba(255,255,255,0.95)', border: '2px solid gold', fontSize: '1.6rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '12px', boxShadow: '0 4px 10px rgba(0,0,0,0.5)' },
     gridContainer: { background: 'rgba(0,0,0,0.95)', padding: '12px', borderRadius: '0 0 15px 0', border: '1px solid rgba(255,215,0,0.5)', backdropFilter: 'blur(10px)' },
     videoGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' },
     gridItem: { width: '55px', height: '55px', color: 'white', borderRadius: '10px', cursor: 'pointer', fontSize: '0.65rem', fontWeight: 'bold' },
     overlay: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, position: 'relative' },
-    editorCard: { background: 'rgba(255,255,255,0.98)', padding: '30px', borderRadius: '40px', width: '95%', maxWidth: '540px', textAlign: 'center' },
+    editorCard: { background: 'rgba(255,255,255,0.98)', padding: '30px', borderRadius: '40px', width: '95%', maxWidth: '520px', textAlign: 'center' },
     inputArea: { minHeight: '80px', padding: '15px', background: '#fff', borderRadius: '20px', border: '1px solid #eee', marginBottom: '15px', textAlign: 'left' },
     token: { cursor: 'pointer', padding: '2px 4px', borderRadius: '4px' },
     hiddenInput: { width: '100%', height: '50px', padding: '10px', borderRadius: '12px', border: '1px solid #eee', marginBottom: '15px' },
@@ -143,6 +144,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     vibeCard: { background: 'rgba(255,255,255,0.85)', padding: '40px', borderRadius: '40px', border: '8px solid #ffd700', width: '90%', maxWidth: '800px', textAlign: 'center' },
     vibeHeader: { color: '#ff4500', marginBottom: '25px' },
     messageArea: { fontSize: '2.2rem', color: '#333', lineHeight: '2.8' },
-    alphabetBox: { width: '125px', height: 'auto', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.4))' },
+    alphabetBox: { width: '130px', height: 'auto', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.4))' },
     backBtn: { marginTop: '20px', background: '#444', color: '#fff', padding: '10px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer' }
 };
