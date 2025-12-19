@@ -16,9 +16,8 @@ function DoubleGift({ word }: { word: string }) {
     const first = word.charAt(0).toUpperCase();
     const last = word.charAt(word.length - 1).toUpperCase();
     const url = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l}.png`;
-
     return (
-        <div style={{ display: 'inline-flex', gap: '8px', alignItems: 'center', margin: '0 10px' }}>
+        <div style={{ display: 'inline-flex', gap: '15px', alignItems: 'center', margin: '0 25px' }}>
             <img src={url(first)} style={styles.alphabetBox} alt={first} />
             <img src={url(last)} style={styles.alphabetBox} alt={last} />
         </div>
@@ -45,10 +44,9 @@ export default function SenderPage() {
                 const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
                 await stripe?.redirectToCheckout({ sessionId: data.id });
             } else {
-                // This matches the error in your screenshot
                 alert("Stripe session failed. Check your Vercel Environment Variables!");
             }
-        } catch (err) { console.error("Payment Error", err); }
+        } catch (err) { console.error("Payment error", err); }
     };
 
     const toggleTile = (word: string) => {
@@ -59,20 +57,18 @@ export default function SenderPage() {
 
     return (
         <main style={styles.container}>
-            {/* UNMUTED CINEMATIC VIDEO */}
             <video key={selectedScene.id} autoPlay loop playsInline style={styles.video}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
-            {/* ENLARGED TOP EDGE MASKING UI TO COVER LOGOS */}
             <div style={styles.topLeftControls}>
                 <div style={styles.gridContainer}>
                     <div style={styles.videoGrid}>
                         {SCENES.map((scene) => (
                             <button key={scene.id} onClick={() => setSelectedScene(scene)} style={{
                                 ...styles.gridItem,
-                                border: selectedScene.id === scene.id ? '2px solid gold' : '1px solid rgba(255,255,255,0.2)',
-                                background: selectedScene.id === scene.id ? 'rgba(255,215,0,0.5)' : 'rgba(0,0,0,0.95)'
+                                border: selectedScene.id === scene.id ? '6px solid gold' : '1px solid rgba(255,255,255,0.2)',
+                                background: selectedScene.id === scene.id ? 'rgba(255,215,0,0.8)' : 'rgba(0,0,0,1)'
                             }}>
                                 {scene.name}
                             </button>
@@ -99,7 +95,6 @@ export default function SenderPage() {
                 ) : (
                     <div style={styles.editorCard}>
                         <h2 style={{ color: '#ff4500' }}>Vibe Greeting Shop</h2>
-                        <p>Tap words to wrap them in a <b>gift</b>! 🎁</p>
                         <div style={styles.inputArea}>
                             {tokens.map((token, i) => {
                                 const clean = token.toLowerCase().replace(/[.,!?;:]/g, "").trim();
@@ -107,8 +102,7 @@ export default function SenderPage() {
                                 return (
                                     <span key={i} onClick={() => toggleTile(token)} style={{
                                         ...styles.token,
-                                        background: isSelected ? '#ffd700' : 'transparent',
-                                        border: isSelected ? '1px solid #b8860b' : 'none'
+                                        background: isSelected ? '#ffd700' : 'transparent'
                                     }}>
                                         {token}
                                     </span>
@@ -132,22 +126,20 @@ export default function SenderPage() {
 const styles: { [key: string]: React.CSSProperties } = {
     container: { height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' },
     video: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'contain', zIndex: 0 },
-    // Anchored at 0,0 for maximum coverage
-    topLeftControls: { position: 'absolute', top: '0', left: '0', zIndex: 100, display: 'flex', flexDirection: 'column', gap: '8px' },
-    eyeBtn: { width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(255,255,255,0.95)', border: '2px solid gold', fontSize: '1.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '15px' },
-    gridContainer: { background: 'rgba(0,0,0,0.98)', padding: '15px', borderRadius: '0 0 25px 0', border: '1px solid rgba(255,215,0,0.5)', backdropFilter: 'blur(10px)' },
-    videoGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' },
-    // Enlarged grid item size to 65px to hide logos
-    gridItem: { width: '65px', height: '65px', color: 'white', borderRadius: '15px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 'bold' },
+    topLeftControls: { position: 'absolute', top: '0', left: '0', zIndex: 100, display: 'flex', flexDirection: 'column', gap: '25px' },
+    eyeBtn: { width: '100px', height: '100px', borderRadius: '50%', background: '#fff', border: '5px solid gold', fontSize: '3.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '50px', boxShadow: '0 15px 35px rgba(0,0,0,0.9)' },
+    gridContainer: { background: '#000', padding: '40px', borderRadius: '0 0 60px 0', borderRight: '5px solid gold', borderBottom: '5px solid gold' },
+    videoGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' },
+    gridItem: { width: '125px', height: '125px', color: 'white', borderRadius: '30px', cursor: 'pointer', fontSize: '1.4rem', fontWeight: 'bold' },
     overlay: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, position: 'relative' },
-    editorCard: { background: 'rgba(255,255,255,0.98)', padding: '30px', borderRadius: '40px', width: '95%', maxWidth: '550px', textAlign: 'center' },
-    inputArea: { minHeight: '80px', padding: '15px', background: '#fff', borderRadius: '20px', border: '1px solid #eee', marginBottom: '15px', textAlign: 'left' },
-    token: { cursor: 'pointer', padding: '2px 4px', borderRadius: '4px' },
-    hiddenInput: { width: '100%', height: '50px', padding: '10px', borderRadius: '12px', border: '1px solid #eee', marginBottom: '15px' },
-    sendBtn: { background: '#ff6600', color: 'white', padding: '15px 45px', borderRadius: '50px', border: 'none', fontSize: '1.2rem', fontWeight: 'bold', cursor: 'pointer' },
-    vibeCard: { background: 'rgba(255,255,255,0.85)', padding: '40px', borderRadius: '40px', border: '8px solid #ffd700', width: '90%', maxWidth: '820px', textAlign: 'center' },
-    vibeHeader: { color: '#ff4500', marginBottom: '25px' },
-    messageArea: { fontSize: '2.3rem', color: '#333', lineHeight: '3.0' },
-    alphabetBox: { width: '140px', height: 'auto', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.4))' },
-    backBtn: { marginTop: '20px', background: '#444', color: '#fff', padding: '10px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer' }
+    editorCard: { background: 'rgba(255,255,255,0.99)', padding: '60px', borderRadius: '70px', width: '95%', maxWidth: '700px', textAlign: 'center' },
+    inputArea: { minHeight: '120px', padding: '25px', background: '#fff', borderRadius: '30px', border: '1px solid #eee', marginBottom: '25px', textAlign: 'left' },
+    token: { cursor: 'pointer', padding: '4px 8px', borderRadius: '8px' },
+    hiddenInput: { width: '100%', height: '60px', padding: '15px', borderRadius: '15px', border: '1px solid #eee', marginBottom: '30px' },
+    sendBtn: { background: '#ff6600', color: 'white', padding: '30px 90px', borderRadius: '80px', border: 'none', fontSize: '2rem', fontWeight: 'bold', cursor: 'pointer' },
+    vibeCard: { background: 'rgba(255,255,255,0.85)', padding: '60px', borderRadius: '70px', border: '20px solid #ffd700', width: '90%', maxWidth: '1200px', textAlign: 'center' },
+    vibeHeader: { color: '#ff4500', marginBottom: '50px', fontSize: '4rem' },
+    messageArea: { fontSize: '3.5rem', color: '#333', lineHeight: '4.2' },
+    alphabetBox: { width: '220px', height: 'auto', filter: 'drop-shadow(0 25px 50px rgba(0,0,0,0.8))' },
+    backBtn: { marginTop: '50px', background: '#333', color: '#fff', padding: '25px 60px', borderRadius: '80px', border: 'none', cursor: 'pointer' }
 };
