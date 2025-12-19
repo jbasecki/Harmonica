@@ -1,111 +1,140 @@
 'use client';
+
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-// Complete A5-Z5 Map from Google Cloud
+// --- DATA ---
 const alphabetMap: { [key: string]: string } = {
-  'A': 'https://storage.googleapis.com/simple-bucket-27/A5.png', 'B': 'https://storage.googleapis.com/simple-bucket-27/B5.png',
-  'C': 'https://storage.googleapis.com/simple-bucket-27/C5.png', 'D': 'https://storage.googleapis.com/simple-bucket-27/D5.png',
-  'E': 'https://storage.googleapis.com/simple-bucket-27/E5.png', 'F': 'https://storage.googleapis.com/simple-bucket-27/F5.png',
-  'G': 'https://storage.googleapis.com/simple-bucket-27/G5.png', 'H': 'https://storage.googleapis.com/simple-bucket-27/H5.png',
-  'I': 'https://storage.googleapis.com/simple-bucket-27/I5.png', 'J': 'https://storage.googleapis.com/simple-bucket-27/J5.png',
-  'K': 'https://storage.googleapis.com/simple-bucket-27/K5.png', 'L': 'https://storage.googleapis.com/simple-bucket-27/L5.png',
-  'M': 'https://storage.googleapis.com/simple-bucket-27/M5.png', 'N': 'https://storage.googleapis.com/simple-bucket-27/N5.png',
-  'O': 'https://storage.googleapis.com/simple-bucket-27/O5.png', 'P': 'https://storage.googleapis.com/simple-bucket-27/P5.png',
-  'Q': 'https://storage.googleapis.com/simple-bucket-27/Q5.png', 'R': 'https://storage.googleapis.com/simple-bucket-27/R5.png',
-  'S': 'https://storage.googleapis.com/simple-bucket-27/S5.png', 'T': 'https://storage.googleapis.com/simple-bucket-27/T5.png',
-  'U': 'https://storage.googleapis.com/simple-bucket-27/U5.png', 'V': 'https://storage.googleapis.com/simple-bucket-27/V5.png',
-  'W': 'https://storage.googleapis.com/simple-bucket-27/W5.png', 'X': 'https://storage.googleapis.com/simple-bucket-27/X5.png',
-  'Y': 'https://storage.googleapis.com/simple-bucket-27/Y5.png', 'Z': 'https://storage.googleapis.com/simple-bucket-27/Z5.png',
+    'A': 'https://storage.googleapis.com/simple-bucket-27/A.png',
+    'B': 'https://storage.googleapis.com/simple-bucket-27/B.png',
+    'C': 'https://storage.googleapis.com/simple-bucket-27/C.png',
+    'D': 'https://storage.googleapis.com/simple-bucket-27/D.png',
+    'E': 'https://storage.googleapis.com/simple-bucket-27/E.png',
+    'F': 'https://storage.googleapis.com/simple-bucket-27/F.png',
+    'G': 'https://storage.googleapis.com/simple-bucket-27/G.png',
+    'H': 'https://storage.googleapis.com/simple-bucket-27/H.png',
+    'I': 'https://storage.googleapis.com/simple-bucket-27/I.png',
+    'J': 'https://storage.googleapis.com/simple-bucket-27/J.png',
+    'K': 'https://storage.googleapis.com/simple-bucket-27/K.png',
+    'L': 'https://storage.googleapis.com/simple-bucket-27/L.png',
+    'M': 'https://storage.googleapis.com/simple-bucket-27/M.png',
+    'N': 'https://storage.googleapis.com/simple-bucket-27/N.png',
+    'O': 'https://storage.googleapis.com/simple-bucket-27/O.png',
+    'P': 'https://storage.googleapis.com/simple-bucket-27/P.png',
+    'Q': 'https://storage.googleapis.com/simple-bucket-27/Q.png',
+    'R': 'https://storage.googleapis.com/simple-bucket-27/R.png',
+    'S': 'https://storage.googleapis.com/simple-bucket-27/S.png',
+    'T': 'https://storage.googleapis.com/simple-bucket-27/T.png',
+    'U': 'https://storage.googleapis.com/simple-bucket-27/U.png',
+    'V': 'https://storage.googleapis.com/simple-bucket-27/V.png',
+    'W': 'https://storage.googleapis.com/simple-bucket-27/W.png',
+    'X': 'https://storage.googleapis.com/simple-bucket-27/X.png',
+    'Y': 'https://storage.googleapis.com/simple-bucket-27/Y.png',
+    'Z': 'https://storage.googleapis.com/simple-bucket-27/Z.png',
 };
 
-// Rhomboid Gift Box Component
+// --- MASTER GIFT COMPONENT ---
 function GiftBoxTile({ word }: { word: string }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const letter = word[0]?.toUpperCase() || 'A';
+    const [isOpen, setIsOpen] = useState(false);
+    const firstL = word[0]?.toUpperCase() || '';
+    const lastL = word[word.length - 1]?.toUpperCase() || '';
+    const firstImg = alphabetMap[firstL] || '';
+    const lastImg = alphabetMap[lastL] || '';
 
-  return (
-    <div 
-      onClick={() => setIsOpen(!isOpen)}
-      style={{
-        cursor: 'pointer', transition: 'all 0.4s ease',
-        transform: isOpen ? 'scale(1.1) rotate(0deg)' : 'scale(1) rotate(-5deg)',
-        display: 'inline-block', margin: '15px'
-      }}
-    >
-      {!isOpen ? (
-        <div style={{
-          width: '110px', height: '110px', background: 'linear-gradient(135deg, #ffd700, #b8860b)',
-          clipPath: 'polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)', // Real Rhomboid Shape
-          display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 20px rgba(0,0,0,0.3)'
-        }}>
-          <span style={{ fontSize: '40px' }}>🎁</span>
-        </div>
-      ) : (
-        <img src={alphabetMap[letter]} style={{ width: '130px', filter: 'drop-shadow(0 0 10px gold)' }} alt="Art Letter" />
-      )}
-    </div>
-  );
+    return (
+        <span onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }} style={styles.giftWrapper}>
+            {isOpen ? (
+                <span style={styles.revealedWord}>{word}</span>
+            ) : (
+                <div style={styles.boxContainer} className="wobble">
+                    <div style={styles.bowKnot}></div>
+                    <div style={styles.bowLoopLeft}></div>
+                    <div style={styles.bowLoopRight}></div>
+                    <div style={styles.boxBody}>
+                        <div style={styles.alphabetGrid}>
+                            {firstImg && <img src={firstImg} alt={firstL} style={styles.glyph} />}
+                            <span style={styles.plusSign}>+</span>
+                            {lastImg && <img src={lastImg} alt={lastL} style={styles.glyph} />}
+                        </div>
+                    </div>
+                </div>
+            )}
+        </span>
+    );
 }
 
-function ReceiverContent({ id }: { id: string }) {
-  const [message, setMessage] = useState('');
-  const [clearView, setClearView] = useState(false);
-  const searchParams = useSearchParams();
-  const scene = searchParams.get('scene') || 'winter-daffodil';
+function ReceiverContent() {
+    const searchParams = useSearchParams();
+    const [snow, setSnow] = useState<any[]>([]);
+    
+    const displayMessage = searchParams.get('msg') || "Thinking of you!";
+    const giftWordsString = searchParams.get('tiles') || "";
+    const giftWords = giftWordsString.toLowerCase().split(',');
+    const videoUrl = "https://storage.googleapis.com/simple-bucket-27/winter-daffodil.mp4";
 
-  useEffect(() => {
-    try { setMessage(atob(id)); } catch { setMessage("Welcome!"); }
-  }, [id]);
+    useEffect(() => {
+        setSnow(Array.from({ length: 30 }).map((_, i) => ({
+            id: i, left: `${Math.random() * 100}%`, duration: `${Math.random() * 10 + 5}s`, delay: `${Math.random() * 5}s`, size: `${Math.random() * 10 + 10}px`
+        })));
+    }, []);
 
-  return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', background: 'black' }}>
-      <video autoPlay loop muted style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}>
-        <source src={`https://storage.googleapis.com/simple-bucket-27/${scene}.mp4`} type="video/mp4" />
-      </video>
+    const tokens = displayMessage.split(/(\s+)/);
 
-      {/* Floating Orbs - Bells & Whistles */}
-      {!clearView && <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }}>
-        <div className="orb" style={{ top: '10%', left: '20%' }} />
-        <div className="orb" style={{ top: '60%', left: '70%', animationDelay: '2s' }} />
-      </div>}
-
-      <div style={{ 
-        position: 'relative', zIndex: 2, textAlign: 'center', paddingTop: '10vh',
-        transition: 'opacity 0.8s', opacity: clearView ? 0 : 1 
-      }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '900px', margin: '0 auto' }}>
-          {message.split(' ').map((word, i) => <GiftBoxTile key={i} word={word} />)}
-        </div>
-      </div>
-
-      <button 
-        onClick={() => setClearView(!clearView)}
-        style={{ 
-          position: 'fixed', bottom: '30px', right: '30px', zIndex: 100,
-          padding: '12px 24px', borderRadius: '30px', background: 'rgba(255,255,255,0.2)',
-          color: 'white', border: '1px solid white', cursor: 'pointer', backdropFilter: 'blur(10px)'
-        }}
-      >
-        {clearView ? 'Show Letter' : 'View Background'}
-      </button>
-
-      <style jsx>{`
-        .orb {
-          position: absolute; width: 300px; height: 300px; 
-          background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%);
-          border-radius: 50%; animation: float 15s infinite alternate ease-in-out;
-        }
-        @keyframes float { from { transform: translate(0,0); } to { transform: translate(100px, 50px); } }
-      `}</style>
-    </div>
-  );
+    return (
+        <main style={styles.container}>
+            <video src={videoUrl} autoPlay loop muted style={styles.videoBg} />
+            {snow.map(s => (
+                <div key={s.id} style={{ ...styles.snowflake, left: s.left, animationDuration: s.duration, animationDelay: s.delay, fontSize: s.size }}>❄</div>
+            ))}
+            <div style={styles.card}>
+                <h1 style={{color: '#ff4500', marginBottom: '10px'}}>A Winter Vibe for You!</h1>
+                <div style={styles.messageArea}>
+                    <p style={{fontSize: '1.8rem', color: '#333', lineHeight: '3.5'}}>
+                        {tokens.map((token, i) => {
+                            const clean = token.toLowerCase().replace(/[.,!?;:]/g, "").trim();
+                            const isGift = clean && giftWords.includes(clean);
+                            return (
+                                <React.Fragment key={i}>
+                                    {isGift ? <GiftBoxTile word={clean} /> : token}
+                                </React.Fragment>
+                            );
+                        })}
+                    </p>
+                </div>
+                <button onClick={() => window.location.href = '/'} style={styles.btn}>Send a Digital Hug Back</button>
+            </div>
+            <style jsx global>{`
+                @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
+                @keyframes wobble { 0% { transform: rotate(0deg); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } 100% { transform: rotate(0deg); } }
+                .wobble:hover { animation: wobble 0.3s ease-in-out infinite; }
+            `}</style>
+        </main>
+    );
 }
 
-export default function Page({ params }: { params: { id: string } }) {
-  return (
-    <Suspense fallback={<div style={{color: 'white', textAlign: 'center', marginTop: '50px'}}>Loading your gift...</div>}>
-      <ReceiverContent id={params.id} />
-    </Suspense>
-  );
+export default function ReceiverPage() {
+    return (
+        <Suspense fallback={<div style={{color:'white', textAlign:'center', paddingTop:'20vh'}}>Loading your vibe...</div>}>
+            <ReceiverContent />
+        </Suspense>
+    );
 }
+
+const styles: { [key: string]: React.CSSProperties } = {
+    container: { height: '100vh', width: '100vw', position: 'relative', overflow: 'hidden', background: '#000', fontFamily: 'sans-serif' },
+    videoBg: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 },
+    snowflake: { position: 'absolute', top: '-10%', color: 'white', zIndex: 0, animationName: 'fall', animationIterationCount: 'infinite', animationTimingFunction: 'linear' },
+    card: { background: 'rgba(255,255,255,0.92)', padding: '40px', borderRadius: '35px', textAlign: 'center', boxShadow: '0 20px 50px rgba(0,0,0,0.5)', zIndex: 1, border: '6px solid #ffd700', maxWidth: '600px' },
+    messageArea: { margin: '20px 0' },
+    giftWrapper: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', margin: '0 8px', verticalAlign: 'middle', cursor: 'pointer' },
+    boxContainer: { position: 'relative', width: '115px', height: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center' },
+    bowKnot: { position: 'absolute', top: '-6px', width: '14px', height: '14px', background: 'white', borderRadius: '50%', zIndex: 3 },
+    bowLoopLeft: { position: 'absolute', top: '-14px', left: '28px', width: '30px', height: '24px', border: '3px solid white', borderRadius: '50% 50% 0 50%', transform: 'rotate(-20deg)', zIndex: 2 },
+    bowLoopRight: { position: 'absolute', top: '-14px', right: '28px', width: '30px', height: '24px', border: '3px solid white', borderRadius: '50% 50% 50% 0', transform: 'rotate(20deg)', zIndex: 2 },
+    boxBody: { width: '100%', height: '100%', background: 'linear-gradient(135deg, #8b4513, #a0522d)', border: '2px solid #ffd700', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+    alphabetGrid: { display: 'flex', alignItems: 'center', gap: '8px' },
+    glyph: { width: '40px', height: '40px', objectFit: 'contain' },
+    plusSign: { color: '#ffd700', fontWeight: 'bold', fontSize: '20px' },
+    revealedWord: { fontSize: '2.2rem', color: '#8b4513', fontWeight: 'bold', borderBottom: '5px solid #ffd700', padding: '0 10px' },
+    btn: { background: 'linear-gradient(45deg, #ff4500, #ff8c00)', color: '#fff', border: 'none', padding: '15px 35px', borderRadius: '40px', cursor: 'pointer', fontWeight: 'bold' }
+};
