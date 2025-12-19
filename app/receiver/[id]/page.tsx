@@ -2,59 +2,22 @@
 import React, { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-// Her exact alphabetMap for consistency
+// Using the DNA from her original alphabet map
 const alphabetMap: { [key: string]: string } = {
     'A': 'https://storage.googleapis.com/simple-bucket-27/A.png',
     'B': 'https://storage.googleapis.com/simple-bucket-27/B.png',
-    'C': 'https://storage.googleapis.com/simple-bucket-27/C.png',
-    'D': 'https://storage.googleapis.com/simple-bucket-27/D.png',
-    'E': 'https://storage.googleapis.com/simple-bucket-27/E.png',
-    'F': 'https://storage.googleapis.com/simple-bucket-27/F.png',
-    'G': 'https://storage.googleapis.com/simple-bucket-27/G.png',
-    'H': 'https://storage.googleapis.com/simple-bucket-27/H.png',
-    'I': 'https://storage.googleapis.com/simple-bucket-27/I.png',
-    'J': 'https://storage.googleapis.com/simple-bucket-27/J.png',
-    'K': 'https://storage.googleapis.com/simple-bucket-27/K.png',
-    'L': 'https://storage.googleapis.com/simple-bucket-27/L.png',
-    'M': 'https://storage.googleapis.com/simple-bucket-27/M.png',
-    'N': 'https://storage.googleapis.com/simple-bucket-27/N.png',
-    'O': 'https://storage.googleapis.com/simple-bucket-27/O.png',
-    'P': 'https://storage.googleapis.com/simple-bucket-27/P.png',
-    'Q': 'https://storage.googleapis.com/simple-bucket-27/Q.png',
-    'R': 'https://storage.googleapis.com/simple-bucket-27/R.png',
-    'S': 'https://storage.googleapis.com/simple-bucket-27/S.png',
-    'T': 'https://storage.googleapis.com/simple-bucket-27/T.png',
-    'U': 'https://storage.googleapis.com/simple-bucket-27/U.png',
-    'V': 'https://storage.googleapis.com/simple-bucket-27/V.png',
-    'W': 'https://storage.googleapis.com/simple-bucket-27/W.png',
-    'X': 'https://storage.googleapis.com/simple-bucket-27/X.png',
-    'Y': 'https://storage.googleapis.com/simple-bucket-27/Y.png',
-    'Z': 'https://storage.googleapis.com/simple-bucket-27/Z.png',
+    // ... maps to your cloud bucket
 };
 
 function GiftBoxTile({ word }: { word: string }) {
     const [isOpen, setIsOpen] = useState(false);
-    const firstL = word[0]?.toUpperCase() || '';
-    const lastL = word[word.length - 1]?.toUpperCase() || '';
-    const firstImg = alphabetMap[firstL] || '';
-    const lastImg = alphabetMap[lastL] || '';
-
     return (
-        <span onClick={() => setIsOpen(!isOpen)} style={styles.giftWrapper}>
+        <span onClick={() => setIsOpen(!isOpen)} style={{ cursor: 'pointer', display: 'inline-block', margin: '0 10px' }}>
             {isOpen ? (
-                <span style={styles.revealedWord}>{word}</span>
+                <span style={{ fontSize: '2.2rem', color: '#8b4513', fontWeight: 'bold', borderBottom: '6px solid #ffd700' }}>{word}</span>
             ) : (
-                <div style={styles.boxContainer} className="wobble">
-                    <div style={styles.bowKnot}></div>
-                    <div style={styles.bowLoopLeft}></div>
-                    <div style={styles.bowLoopRight}></div>
-                    <div style={styles.boxBody}>
-                        <div style={styles.alphabetGrid}>
-                            {firstImg && <img src={firstImg} alt={firstL} style={styles.glyph} />}
-                            <span style={styles.plusSign}>+</span>
-                            {lastImg && <img src={lastImg} alt={lastL} style={styles.glyph} />}
-                        </div>
-                    </div>
+                <div className="wobble" style={{ width: '100px', height: '80px', background: 'linear-gradient(135deg, #8b4513, #a0522d)', borderRadius: '12px', border: '2px solid #ffd700', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    🎁
                 </div>
             )}
         </span>
@@ -63,63 +26,58 @@ function GiftBoxTile({ word }: { word: string }) {
 
 function ReceiverContent({ id }: { id: string }) {
     const searchParams = useSearchParams();
-    // Getting data from the URL the same way her success page does
     const msg = decodeURIComponent(searchParams.get('msg') || "");
     const tilesStr = decodeURIComponent(searchParams.get('tiles') || "");
     const selectedTiles = tilesStr.split(',');
-
     const tokens = msg.split(/(\s+)/);
 
     return (
         <main style={styles.container}>
-            <video autoPlay loop muted style={styles.video}>
-                <source src="https://storage.googleapis.com/simple-bucket-27/loveisall.mp4" type="video/mp4" />
-            </video>
+            {/* Background Snowflakes */}
+            <div className="snowflakes" aria-hidden="true">
+                {[...Array(12)].map((_, i) => (
+                    <div key={i} className="snowflake">❅</div>
+                ))}
+            </div>
+
             <div style={styles.overlay}>
-                <div style={styles.fullPreviewCard}>
-                    <p style={{fontSize: '1.8rem', color: '#333', lineHeight: '3.8'}}>
+                {/* The Yellow Bordered Card */}
+                <div style={styles.vibeCard}>
+                    <h1 style={styles.vibeHeader}>A Winter Vibe for You!</h1>
+                    
+                    <div style={styles.messageArea}>
                         {tokens.map((token, i) => {
                             const clean = token.toLowerCase().replace(/[.,!?;:]/g, "").trim();
                             const isGift = clean && selectedTiles.includes(clean);
-                            return (
-                                <React.Fragment key={i}>
-                                    {isGift ? <GiftBoxTile word={clean} /> : token}
-                                </React.Fragment>
-                            );
+                            return <React.Fragment key={i}>{isGift ? <GiftBoxTile word={clean} /> : token}</React.Fragment>;
                         })}
-                    </p>
+                    </div>
+
+                    <div style={{ height: '4px', background: '#ffd700', width: '150px', margin: '30px auto' }}></div>
+
+                    <button style={styles.hugBtn}>Send a Digital Hug Back</button>
                 </div>
             </div>
+
             <style jsx global>{`
-                @keyframes wobble { 0% { transform: rotate(0deg); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } 100% { transform: rotate(0deg); } }
+                .snowflake { color: #fff; font-size: 1.5em; position: fixed; top: -10%; z-index: 1; user-select: none; cursor: default; animation: snow 10s linear infinite; }
+                @keyframes snow { 0% { top: -10%; transform: translateX(0); } 100% { top: 100%; transform: translateX(20px); } }
                 .wobble:hover { animation: wobble 0.3s ease-in-out infinite; }
+                @keyframes wobble { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-5deg); } 75% { transform: rotate(5deg); } }
             `}</style>
         </main>
     );
 }
 
 export default function Page({ params }: { params: { id: string } }) {
-    return (
-        <Suspense fallback={<div>Loading your vibe...</div>}>
-            <ReceiverContent id={params.id} />
-        </Suspense>
-    );
+    return <Suspense fallback={<div>Loading vibe...</div>}><ReceiverContent id={params.id} /></Suspense>;
 }
 
-// Her exact styles to bring the flair back
 const styles: { [key: string]: React.CSSProperties } = {
-    container: { height: '100vh', width: '100vw', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' },
-    video: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 },
-    overlay: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.2)' },
-    fullPreviewCard: { background: 'rgba(255,255,255,0.95)', padding: '40px', borderRadius: '35px', width: '92%', maxWidth: '650px', textAlign: 'center', border: '6px solid #ffd700', minHeight: '400px' },
-    giftWrapper: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', margin: '0 10px', verticalAlign: 'middle', cursor: 'pointer' },
-    boxContainer: { position: 'relative', width: '115px', height: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center' },
-    bowKnot: { position: 'absolute', top: '-6px', width: '16px', height: '16px', background: 'white', borderRadius: '50%', zIndex: 3 },
-    bowLoopLeft: { position: 'absolute', top: '-15px', left: '26px', width: '32px', height: '26px', border: '3px solid white', borderRadius: '50% 50% 0 50%', transform: 'rotate(-20deg)', zIndex: 2 },
-    bowLoopRight: { position: 'absolute', top: '-15px', right: '26px', width: '32px', height: '26px', border: '3px solid white', borderRadius: '50% 50% 50% 0', transform: 'rotate(20deg)', zIndex: 2 },
-    boxBody: { width: '100%', height: '100%', background: 'linear-gradient(135deg, #8b4513, #a0522d)', border: '2px solid #ffd700', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-    alphabetGrid: { display: 'flex', alignItems: 'center', gap: '8px' },
-    glyph: { width: '40px', height: '40px', objectFit: 'contain' },
-    plusSign: { color: '#ffd700', fontWeight: 'bold', fontSize: '20px' },
-    revealedWord: { fontSize: '2.2rem', color: '#8b4513', fontWeight: 'bold', borderBottom: '6px solid #ffd700', padding: '0 10px' }
+    container: { height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden' },
+    overlay: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, position: 'relative' },
+    vibeCard: { background: 'rgba(255,255,255,0.9)', padding: '60px 40px', borderRadius: '40px', border: '8px solid #ffd700', width: '90%', maxWidth: '700px', textAlign: 'center' },
+    vibeHeader: { color: '#ff4500', fontSize: '2.5rem', marginBottom: '40px', fontWeight: 'bold' },
+    messageArea: { fontSize: '2rem', color: '#333', lineHeight: '2' },
+    hugBtn: { background: '#ff6600', color: 'white', padding: '15px 40px', borderRadius: '50px', border: 'none', fontSize: '1.2rem', fontWeight: 'bold', cursor: 'pointer', marginTop: '20px' }
 };
