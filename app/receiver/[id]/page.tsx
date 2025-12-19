@@ -2,7 +2,44 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-// ... (SCENES and GiftBoxTile remain the same)
+const SCENES = [
+    { id: 'loveisall', name: 'Love' }, { id: 'winter-daffodil', name: 'Winter' },
+    { id: 'goldenglow', name: 'Glow' }, { id: 'midnight', name: 'Sparkle' },
+    { id: 'my-little', name: 'Little' }, { id: 'magic', name: 'Magic' },
+    { id: 'snowman', name: 'Snow' }, { id: 'cat-vibe', name: 'Cat' },
+    { id: 'flowers', name: 'Floral' }, { id: 'stars', name: 'Stars' },
+    { id: 'ocean', name: 'Ocean' }, { id: 'forest', name: 'Forest' }
+];
+
+function GiftBoxTile({ word, onOpen }: { word: string, onOpen: () => void }) {
+    const [isOpen, setIsOpen] = useState(false);
+    
+    const playPop = () => {
+        try {
+            const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        } catch (e) { console.log("Audio blocked"); }
+    };
+
+    return (
+        <span onClick={() => { if(!isOpen) { playPop(); onOpen(); } setIsOpen(!isOpen); }} style={{ cursor: 'pointer', display: 'inline-block', margin: '0 8px', verticalAlign: 'middle' }}>
+            {isOpen ? (
+                <span style={{ fontSize: '2.2rem', color: '#8b4513', fontWeight: 'bold', borderBottom: '6px solid #ffd700' }}>{word}</span>
+            ) : (
+                <div className="wobble" style={styles.boxBody}>🎁</div>
+            )}
+        </span>
+    );
+}
 
 function ReceiverContent() {
     const searchParams = useSearchParams();
@@ -15,7 +52,6 @@ function ReceiverContent() {
     const selectedTiles = tilesStr.split(',').filter(t => t !== "");
     const tokens = msg.split(/(\s+)/);
 
-    // Auto-reveal logic
     useEffect(() => {
         if (selectedTiles.length > 0 && openedCount === selectedTiles.length) {
             const timer = setTimeout(() => setShowCard(false), 3000);
@@ -25,11 +61,10 @@ function ReceiverContent() {
 
     return (
         <main style={styles.container}>
-            <video key={currentVibe.id} autoPlay loop muted style={styles.video}>
+            <video key={currentVibe.id} autoPlay loop muted playsInline style={styles.video}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${currentVibe.id}.mp4`} type="video/mp4" />
             </video>
 
-            {/* ALWAYS VISIBLE TOGGLE BUTTON */}
             <button 
                 onClick={() => setShowCard(!showCard)} 
                 style={styles.floatingToggle}
@@ -38,7 +73,6 @@ function ReceiverContent() {
                 {showCard ? '👁️' : '📖'}
             </button>
 
-            {/* THE 12-SPACE GRID */}
             <div style={styles.gridContainer}>
                 <h4 style={styles.gridHeader}>CHOOSE BACKGROUND</h4>
                 <div style={styles.videoGrid}>
@@ -52,7 +86,6 @@ function ReceiverContent() {
                 {[...Array(15)].map((_, i) => <div key={i} className="snowflake">❅</div>)}
             </div>
 
-            {/* MESSAGE CARD WITH TRANSITION */}
             <div style={{ ...styles.overlay, opacity: showCard ? 1 : 0, pointerEvents: showCard ? 'auto' : 'none', transition: 'opacity 0.8s ease' }}>
                 <div style={styles.vibeCard}>
                     <h1 style={styles.vibeHeader}>A Winter Vibe for You!</h1>
@@ -77,21 +110,27 @@ function ReceiverContent() {
     );
 }
 
-// ... (Page wrapper and GiftBoxTile stay the same)
+// Fixed the Page export to match Next.js requirements
+export default function Page({ params }: { params: { id: string } }) {
+    return (
+        <Suspense fallback={<div>Loading vibe...</div>}>
+            <ReceiverContent />
+        </Suspense>
+    );
+}
 
-const styles = {
-    // ... (Keep existing styles)
-    floatingToggle: {
-        position: 'absolute', top: '25px', left: '25px', zIndex: 100,
-        width: '50px', height: '50px', borderRadius: '50%',
-        background: 'rgba(255,255,255,0.9)', border: '2px solid #ffd700',
-        fontSize: '1.5rem', cursor: 'pointer', display: 'flex',
-        alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
-    } as React.CSSProperties,
-    overlay: { 
-        height: '100%', width: '100%', display: 'flex', 
-        alignItems: 'center', justifyContent: 'center', 
-        zIndex: 10, position: 'relative' 
-    } as React.CSSProperties,
-    // ...
+const styles: { [key: string]: React.CSSProperties } = {
+    container: { height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' },
+    video: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 },
+    floatingToggle: { position: 'absolute', top: '25px', left: '25px', zIndex: 100, width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(255,255,255,0.9)', border: '2px solid #ffd700', fontSize: '1.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
+    gridContainer: { position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', zIndex: 20, background: 'rgba(0,0,0,0.7)', padding: '15px', borderRadius: '25px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,215,0,0.3)' },
+    gridHeader: { color: 'gold', fontSize: '0.6rem', marginBottom: '10px', textAlign: 'center' },
+    videoGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' },
+    gridItem: { width: '55px', height: '55px', color: 'white', borderRadius: '10px', cursor: 'pointer', fontSize: '0.6rem', fontWeight: 'bold' },
+    overlay: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, position: 'relative' },
+    vibeCard: { background: 'rgba(255,255,255,0.9)', padding: '40px', borderRadius: '40px', border: '8px solid #ffd700', width: '90%', maxWidth: '750px', textAlign: 'center' },
+    vibeHeader: { color: '#ff4500', fontSize: '2.5rem', marginBottom: '20px', fontWeight: 'bold' },
+    messageArea: { fontSize: '2rem', color: '#333', lineHeight: '2.5' },
+    boxBody: { width: '80px', height: '60px', background: 'linear-gradient(135deg, #8b4513, #a0522d)', borderRadius: '12px', border: '2px solid #ffd700', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' },
+    hugBtn: { background: '#ff6600', color: 'white', padding: '15px 40px', borderRadius: '50px', border: 'none', fontSize: '1.2rem', fontWeight: 'bold', cursor: 'pointer', marginTop: '30px' }
 };
