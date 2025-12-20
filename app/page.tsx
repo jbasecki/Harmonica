@@ -1,7 +1,38 @@
-/* ... existing imports and SCENES array ... */
+'use client';
+import React, { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+
+const SCENES = [
+    { id: 'one', label: '1' }, { id: 'two', label: '2' }, { id: 'three', label: '3' },
+    { id: 'four', label: '4' }, { id: 'five', label: '5' }, { id: 'six', label: '6' },
+    { id: 'seven', label: '7' }, { id: 'eight', label: '8' }, { id: 'nine', label: '9' },
+    { id: 'ten', label: '10' }, { id: 'eleven', label: '11' }, { id: 'twelve', label: '12' }
+];
 
 export default function SenderPage() {
-    /* ... existing state hooks ... */
+    const [message, setMessage] = useState("");
+    const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
+    const [selectedScene, setSelectedScene] = useState(SCENES[0]);
+    const [isPreview, setIsPreview] = useState(false);
+    const [isCleanView, setIsCleanView] = useState(false);
+
+    const tokens = message.split(/(\s+)/);
+    const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
+
+    const handleSend = async () => {
+        try {
+            const res = await fetch('/api/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message, tiles: selectedTiles.join(','), sceneId: selectedScene.id }),
+            });
+            const data = await res.json();
+            if (data.id) {
+                const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+                await stripe?.redirectToCheckout({ sessionId: data.id });
+            }
+        } catch (err) { console.error(err); }
+    };
 
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
@@ -9,7 +40,6 @@ export default function SenderPage() {
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
-            {/* EYE TOGGLE: CLEAN VIEW */}
             {isCleanView && (
                 <div onClick={() => setIsCleanView(false)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 100, cursor: 'pointer', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '60px' }}>
                     <div style={{ background: '#fff', padding: '15px 25px', borderRadius: '50px', fontWeight: 'bold', boxShadow: '0 0 20px rgba(0,0,0,0.5)' }}>✍️ Tap to return to Editor</div>
@@ -18,17 +48,13 @@ export default function SenderPage() {
 
             {!isCleanView && (
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    
-                    {/* MAIN CARD */}
                     <div style={{ background: 'rgba(255,255,255,0.96)', padding: '30px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '850px' : '580px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
                         <h2 style={{ marginBottom: '10px' }}>{isPreview ? "👁️ Preview" : "Vibe Greeting Shop"}</h2>
                         
-                        {/* PREVIEW AREA: Enlarged for Bow Visibility */}
                         <div style={{ minHeight: '220px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '25px', flexWrap: 'wrap', paddingTop: '40px' }}>
                             {isPreview ? (
                                 selectedTiles.map((tile, idx) => (
                                     <div key={idx} style={{ position: 'relative', width: '280px' }}>
-                                        {/* Typos handled: gifr-box.png */}
                                         <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
                                         <div style={{ position: 'absolute', bottom: '35px', left: '15px', right: '15px', display: 'flex', justifyContent: 'center', gap: '8px' }}>
                                             <img src={getLetterUrl(tile.charAt(0))} style={{ width: '45%', borderRadius: '4px', border: '1.5px solid gold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)' }} />
@@ -47,7 +73,7 @@ export default function SenderPage() {
                             )}
                         </div>
 
-                        {!isPreview && <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '100%', height: '60px', marginTop: '15px', borderRadius: '15px', padding: '12px', border: '1px solid #ddd' }} />}
+                        {!isPreview && <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message..." style={{ width: '100%', height: '60px', marginTop: '15px', borderRadius: '15px', padding: '12px', border: '1px solid #ddd' }} />}
                         
                         <div style={{ marginTop: '20px', display: 'flex', gap: '15px', justifyContent: 'center' }}>
                             <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#eee', padding: '12px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>{isPreview ? '✍️ Edit' : '👁️ Preview'}</button>
@@ -55,7 +81,6 @@ export default function SenderPage() {
                         </div>
                     </div>
 
-                    {/* SIDEBAR: GRID + EYE */}
                     <div style={{ marginLeft: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <div style={{ background: 'rgba(255,255,255,0.85)', padding: '15px', borderRadius: '25px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                             {SCENES.map((s) => (
