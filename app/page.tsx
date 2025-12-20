@@ -3,12 +3,18 @@ import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
 const SCENES = [
-    { id: 'loveisall', name: 'Love' }, { id: 'winter-daffodil', name: 'Winter' },
-    { id: 'goldenglow', name: 'Glow' }, { id: 'midnight', name: 'Sparkle' },
-    { id: 'my-little', name: 'Little' }, { id: 'magic', name: 'Magic' },
-    { id: 'snowman', name: 'Snow' }, { id: 'cat-vibe', name: 'Cat' },
-    { id: 'flowers', name: 'Floral' }, { id: 'stars', name: 'Stars' },
-    { id: 'ocean', name: 'Ocean' }, { id: 'forest', name: 'Forest' }
+    { id: 'loveisall', name: 'Love' },
+    { id: 'daffodil-love', name: 'Winter' },
+    { id: 'digital-hug', name: 'Hug' },
+    { id: 'giftofheart', name: 'Heart' },
+    { id: 'happy-holidays', name: 'Holidays' },
+    { id: 'happy-newyear', name: 'New Year' },
+    { id: 'happy-newyear26', name: '2026' },
+    { id: 'joy-of-winter', name: 'Joy' },
+    { id: 'bigfeelings', name: 'Feelings' },
+    { id: 'midnight', name: 'Midnight' },
+    { id: 'magic-stars', name: 'Magic' },
+    { id: 'forest-vibe', name: 'Forest' }
 ];
 
 export default function SenderPage() {
