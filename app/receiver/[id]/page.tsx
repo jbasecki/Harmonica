@@ -1,59 +1,97 @@
 'use client';
-import React, { useState, Suspense } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-/* --- DOUBLE CLICK-TO-REVEAL GIFT --- */
-function DoubleGift({ word, onOpen }: { word: string, onOpen: () => void }) {
-    const [isOpen, setIsOpen] = useState(false);
-    const first = word.charAt(0).toUpperCase();
-    const last = word.charAt(word.length - 1).toUpperCase();
-    const url = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l}.png`;
-
-    return (
-        <span onClick={() => { if(!isOpen) onOpen(); setIsOpen(!isOpen); }} style={{ cursor: 'pointer', display: 'inline-flex', gap: '5px', margin: '0 10px', verticalAlign: 'middle' }}>
-            {isOpen ? (
-                <span style={{ fontSize: '2.5rem', color: '#8b4513', fontWeight: 'bold', borderBottom: '6px solid #ffd700' }}>{word}</span>
-            ) : (
-                <>
-                    <img src={url(first)} className="wobble" style={styles.alphabetBox} alt="First Letter" />
-                    <img src={url(last)} className="wobble" style={styles.alphabetBox} alt="Last Letter" />
-                </>
-            )}
-        </span>
-    );
-}
+// ... (SCENES and GiftBoxTile remain the same)
 
 function ReceiverContent() {
     const searchParams = useSearchParams();
+    const [currentVibe, setCurrentVibe] = useState(SCENES[0]);
     const [showCard, setShowCard] = useState(true);
+    const [openedCount, setOpenedCount] = useState(0);
+    
     const msg = decodeURIComponent(searchParams.get('msg') || "");
-    const selectedTiles = decodeURIComponent(searchParams.get('tiles') || "").split(',');
+    const tilesStr = decodeURIComponent(searchParams.get('tiles') || "");
+    const selectedTiles = tilesStr.split(',').filter(t => t !== "");
     const tokens = msg.split(/(\s+)/);
+
+    // Auto-reveal logic
+    useEffect(() => {
+        if (selectedTiles.length > 0 && openedCount === selectedTiles.length) {
+            const timer = setTimeout(() => setShowCard(false), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [openedCount, selectedTiles.length]);
 
     return (
         <main style={styles.container}>
-            <video autoPlay loop muted playsInline style={styles.video}>
-                <source src={`https://storage.googleapis.com/simple-bucket-27/winter-daffodil.mp4`} type="video/mp4" />
+            <video key={currentVibe.id} autoPlay loop muted style={styles.video}>
+                <source src={`https://storage.googleapis.com/simple-bucket-27/${currentVibe.id}.mp4`} type="video/mp4" />
             </video>
 
-            <button onClick={() => setShowCard(!showCard)} style={styles.floatingToggle}>{showCard ? '👁️' : '📖'}</button>
+            {/* ALWAYS VISIBLE TOGGLE BUTTON */}
+            <button 
+                onClick={() => setShowCard(!showCard)} 
+                style={styles.floatingToggle}
+                title={showCard ? "Hide Message" : "Show Message"}
+            >
+                {showCard ? '👁️' : '📖'}
+            </button>
 
-            <div style={{ ...styles.overlay, opacity: showCard ? 1 : 0, transition: 'opacity 0.8s ease' }}>
+            {/* THE 12-SPACE GRID */}
+            <div style={styles.gridContainer}>
+                <h4 style={styles.gridHeader}>CHOOSE BACKGROUND</h4>
+                <div style={styles.videoGrid}>
+                    {SCENES.map((scene) => (
+                        <button key={scene.id} onClick={() => setCurrentVibe(scene)} style={{ ...styles.gridItem, border: currentVibe.id === scene.id ? '2px solid gold' : '1px solid rgba(255,255,255,0.2)', background: currentVibe.id === scene.id ? 'rgba(255,215,0,0.3)' : 'rgba(0,0,0,0.6)' }}>{scene.name}</button>
+                    ))}
+                </div>
+            </div>
+
+            <div className="snowflakes">
+                {[...Array(15)].map((_, i) => <div key={i} className="snowflake">❅</div>)}
+            </div>
+
+            {/* MESSAGE CARD WITH TRANSITION */}
+            <div style={{ ...styles.overlay, opacity: showCard ? 1 : 0, pointerEvents: showCard ? 'auto' : 'none', transition: 'opacity 0.8s ease' }}>
                 <div style={styles.vibeCard}>
-                    <h1 style={styles.vibeHeader}>A Winter Vibe!</h1>
+                    <h1 style={styles.vibeHeader}>A Winter Vibe for You!</h1>
                     <div style={styles.messageArea}>
                         {tokens.map((token, i) => {
                             const clean = token.toLowerCase().replace(/[.,!?;:]/g, "").trim();
-                            return selectedTiles.includes(clean) ? <DoubleGift key={i} word={token} onOpen={() => {}} /> : token;
+                            const isGift = clean && selectedTiles.includes(clean);
+                            return <React.Fragment key={i}>{isGift ? <GiftBoxTile word={token} onOpen={() => setOpenedCount(prev => prev + 1)} /> : token}</React.Fragment>;
                         })}
                     </div>
-                    <button onClick={() => window.location.href = '/'} style={styles.hugBtn}>Send Back</button>
+                    <button onClick={() => window.location.href = '/'} style={styles.hugBtn}>Send a Secret Message Back</button>
                 </div>
             </div>
+
+            <style jsx global>{`
+                .snowflake { color: #fff; font-size: 1.5em; position: fixed; top: -10%; z-index: 1; animation: snow 10s linear infinite; }
+                @keyframes snow { 0% { top: -10%; } 100% { top: 110%; } }
+                .wobble:hover { animation: wobble 0.3s ease-in-out infinite; }
+                @keyframes wobble { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-5deg); } 75% { transform: rotate(5deg); } }
+            `}</style>
         </main>
     );
 }
 
-export default function Page({ params }: { params: { id: string } }) {
-    return <Suspense fallback={<div>Loading...</div>}><ReceiverContent /></Suspense>;
-}
+// ... (Page wrapper and GiftBoxTile stay the same)
+
+const styles = {
+    // ... (Keep existing styles)
+    floatingToggle: {
+        position: 'absolute', top: '25px', left: '25px', zIndex: 100,
+        width: '50px', height: '50px', borderRadius: '50%',
+        background: 'rgba(255,255,255,0.9)', border: '2px solid #ffd700',
+        fontSize: '1.5rem', cursor: 'pointer', display: 'flex',
+        alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+    } as React.CSSProperties,
+    overlay: { 
+        height: '100%', width: '100%', display: 'flex', 
+        alignItems: 'center', justifyContent: 'center', 
+        zIndex: 10, position: 'relative' 
+    } as React.CSSProperties,
+    // ...
+};
