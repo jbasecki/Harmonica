@@ -13,9 +13,11 @@ export default function SenderPage() {
     const [message, setMessage] = useState("");
     const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
     const [selectedScene, setSelectedScene] = useState(SCENES[0]);
-    const [isCleanView, setIsCleanView] = useState(false); // New state for "The Eye"
+    const [isPreview, setIsPreview] = useState(false);
+    const [isCleanView, setIsCleanView] = useState(false);
 
     const tokens = message.split(/(\s+)/);
+    const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
 
     const handleSend = async () => {
         try {
@@ -34,55 +36,62 @@ export default function SenderPage() {
 
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
+            {/* CLEAN CINEMATIC BACKGROUND */}
             <video key={selectedScene.id} autoPlay loop playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
-            {/* EXIT CLEAN VIEW BUTTON */}
+            {/* THE EYE: CLEAN VIEW EXIT BUTTON */}
             {isCleanView && (
-                <button 
-                    onClick={() => setIsCleanView(false)} 
-                    style={{ position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', zIndex: 100, background: 'rgba(255,255,255,0.8)', border: 'none', borderRadius: '50%', width: '70px', height: '70px', fontSize: '2rem', cursor: 'pointer', boxShadow: '0 0 20px rgba(0,0,0,0.5)' }}
-                >
-                    ✍️
-                </button>
+                <div onClick={() => setIsCleanView(false)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 100, cursor: 'pointer', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '60px' }}>
+                    <div style={{ background: '#fff', padding: '15px 25px', borderRadius: '50px', fontWeight: 'bold', boxShadow: '0 0 20px rgba(0,0,0,0.5)' }}>✍️ Tap to Edit</div>
+                </div>
             )}
 
             {!isCleanView && (
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    
                     {/* UI CARD */}
-                    <div style={{ background: 'rgba(255,255,255,0.95)', padding: '30px', borderRadius: '50px', width: '90%', maxWidth: '580px', textAlign: 'center', boxShadow: '0 15px 35px rgba(0,0,0,0.2)' }}>
-                        <h2 style={{ color: '#333', marginBottom: '10px' }}>Vibe Greeting Shop</h2>
+                    <div style={{ background: 'rgba(255,255,255,0.96)', padding: '40px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '820px' : '580px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
+                        <h2 style={{ marginBottom: '10px' }}>{isPreview ? "👁️ Preview" : "Vibe Greeting Shop"}</h2>
                         
-                        <div style={{ minHeight: '120px', padding: '15px', background: '#fff', borderRadius: '20px', border: '1px solid #eee', textAlign: 'left', lineHeight: '1.8' }}>
-                            {tokens.map((t, i) => {
-                                const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
-                                const isSel = selectedTiles.includes(clean);
-                                return <span key={i} onClick={() => clean && setSelectedTiles(prev => isSel ? prev.filter(x => x !== clean) : [...prev, clean])} style={{ padding: '2px 6px', borderRadius: '6px', cursor: 'pointer', background: isSel ? '#ff6600' : 'transparent', color: isSel ? '#fff' : '#000' }}>{t}</span>
-                            })}
+                        <div style={{ minHeight: '180px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '25px', flexWrap: 'wrap' }}>
+                            {isPreview ? (
+                                selectedTiles.map((tile, idx) => (
+                                    <div key={idx} style={{ position: 'relative', width: '220px' }}>
+                                        <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
+                                        <div style={{ position: 'absolute', bottom: '28px', left: '12px', right: '12px', display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '45%', borderRadius: '4px', border: '1.5px solid gold' }} />
+                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '45%', borderRadius: '4px', border: '1.5px solid gold' }} />
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div style={{ textAlign: 'left', lineHeight: '2', fontSize: '1.2rem' }}>
+                                    {tokens.map((t, i) => {
+                                        const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
+                                        const isSel = selectedTiles.includes(clean);
+                                        return <span key={i} onClick={() => clean && setSelectedTiles(prev => isSel ? prev.filter(x => x !== clean) : [...prev, clean])} style={{ padding: '2px 6px', borderRadius: '6px', cursor: 'pointer', background: isSel ? '#ff6600' : 'transparent', color: isSel ? '#fff' : '#000' }}>{t}</span>
+                                    })}
+                                </div>
+                            )}
                         </div>
 
-                        <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message..." style={{ width: '100%', height: '60px', marginTop: '15px', borderRadius: '12px', padding: '10px', border: '1px solid #ddd' }} />
+                        {!isPreview && <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message..." style={{ width: '100%', height: '70px', marginTop: '15px', borderRadius: '15px', padding: '12px', border: '1px solid #ddd' }} />}
                         
-                        <button onClick={handleSend} style={{ width: '100%', marginTop: '20px', background: '#ff6600', color: '#fff', padding: '15px', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer' }}>Wrap & Send (0.99¢)</button>
+                        <div style={{ marginTop: '25px', display: 'flex', gap: '15px', justifyContent: 'center' }}>
+                            <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#eee', padding: '12px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>{isPreview ? '✍️ Edit' : '✨ Review'}</button>
+                            <button onClick={handleSend} style={{ background: '#ff6600', color: '#fff', padding: '12px 35px', borderRadius: '50px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Wrap & Send (0.99¢)</button>
+                        </div>
                     </div>
 
-                    {/* SIDEBAR GRID */}
-                    <div style={{ marginLeft: '20px', display: 'flex', flexDirection: 'column', gap: '15px', alignItems: 'center' }}>
-                        <div style={{ background: 'rgba(255,255,255,0.85)', padding: '15px', borderRadius: '25px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+                    {/* SIDEBAR GRID & EYE */}
+                    <div style={{ marginLeft: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <div style={{ background: 'rgba(255,255,255,0.85)', padding: '15px', borderRadius: '25px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                             {SCENES.map((s) => (
-                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '45px', height: '45px', borderRadius: '10px', border: selectedScene.id === s.id ? '3px solid #ff6600' : '1px solid #ccc', background: '#fff', cursor: 'pointer', fontWeight: 'bold' }}>{s.label}</button>
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '55px', height: '55px', borderRadius: '15px', border: selectedScene.id === s.id ? '3px solid #ff6600' : '1px solid #ccc', background: '#fff', cursor: 'pointer', fontWeight: 'bold' }}>{s.label}</button>
                             ))}
                         </div>
-                        
-                        {/* THE EYE (Toggle Clean View) */}
-                        <button 
-                            onClick={() => setIsCleanView(true)} 
-                            style={{ background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '20px', width: '100%', padding: '12px', cursor: 'pointer', fontSize: '1.5rem', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}
-                        >
-                            👁️
-                        </button>
+                        <button onClick={() => setIsCleanView(true)} style={{ background: '#fff', border: '2px solid #ff6600', borderRadius: '20px', padding: '15px', cursor: 'pointer', fontSize: '1.8rem' }}>👁️</button>
                     </div>
                 </div>
             )}
