@@ -51,19 +51,33 @@ export default function SenderPage() {
                     <div style={{ background: 'rgba(255,255,255,0.96)', padding: '30px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '850px' : '580px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
                         <h2 style={{ marginBottom: '10px' }}>{isPreview ? "👁️ Preview" : "Vibe Greeting Shop"}</h2>
                         
-                        <div style={{ minHeight: '220px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '25px', flexWrap: 'wrap', paddingTop: '40px' }}>
-                            {isPreview ? (
-                                selectedTiles.map((tile, idx) => (
-                                    <div key={idx} style={{ position: 'relative', width: '280px' }}>
-                                        <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
-                                        <div style={{ position: 'absolute', bottom: '35px', left: '15px', right: '15px', display: 'flex', justifyContent: 'center', gap: '8px' }}>
-                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '45%', borderRadius: '4px', border: '1.5px solid gold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)' }} />
-                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '45%', borderRadius: '4px', border: '1.5px solid gold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)' }} />
-                                        </div>
+                        <div style={{ minHeight: '260px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '25px', flexWrap: 'wrap', paddingTop: '20px' }}>
+                            {isPreview || selectedTiles.length > 0 ? (
+                                /* THE DYNAMIC BOX PREVIEW */
+                                selectedTiles.length === 0 ? (
+                                    /* PRE-DETERMINED WIGGLING BOX */
+                                    <div style={{ position: 'relative', width: '300px', animation: 'gentleWiggle 3s infinite ease-in-out' }}>
+                                        <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} alt="Base Gift Box" />
                                     </div>
-                                ))
+                                ) : (
+                                    /* DYNAMIC BOXES FILLED WITH CARDS */
+                                    selectedTiles.map((tile, idx) => (
+                                        <div key={idx} style={{ position: 'relative', width: '280px' }}>
+                                            <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
+                                            <div style={{ position: 'absolute', bottom: '38px', left: '15px', right: '15px', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                                                <img src={getLetterUrl(tile.charAt(0))} style={{ width: '42%', borderRadius: '4px', border: '1.5px solid gold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)' }} />
+                                                <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '42%', borderRadius: '4px', border: '1.5px solid gold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)' }} />
+                                            </div>
+                                        </div>
+                                    ))
+                                )
                             ) : (
+                                /* INITIAL STATE: LARGE BOX SUGGESTION */
                                 <div style={{ textAlign: 'left', lineHeight: '2', fontSize: '1.2rem', width: '100%' }}>
+                                     <div style={{ position: 'relative', width: '280px', margin: '0 auto 20px', animation: 'gentleWiggle 3s infinite ease-in-out' }}>
+                                        <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
+                                        <p style={{ position: 'absolute', top: '50%', width: '100%', textAlign: 'center', color: '#ff6600', fontWeight: 'bold' }}>Gift a Vibe</p>
+                                    </div>
                                     {tokens.map((t, i) => {
                                         const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
                                         const isSel = selectedTiles.includes(clean);
@@ -73,7 +87,7 @@ export default function SenderPage() {
                             )}
                         </div>
 
-                        {!isPreview && <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message..." style={{ width: '100%', height: '60px', marginTop: '15px', borderRadius: '15px', padding: '12px', border: '1px solid #ddd' }} />}
+                        {!isPreview && <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '100%', height: '60px', marginTop: '15px', borderRadius: '15px', padding: '12px', border: '1px solid #ddd' }} />}
                         
                         <div style={{ marginTop: '20px', display: 'flex', gap: '15px', justifyContent: 'center' }}>
                             <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#eee', padding: '12px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>{isPreview ? '✍️ Edit' : '👁️ Preview'}</button>
@@ -91,6 +105,12 @@ export default function SenderPage() {
                     </div>
                 </div>
             )}
+            <style jsx>{`
+                @keyframes gentleWiggle {
+                    0%, 100% { transform: rotate(-2deg); }
+                    50% { transform: rotate(2deg); }
+                }
+            `}</style>
         </main>
     );
 }
