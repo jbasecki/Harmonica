@@ -40,7 +40,7 @@ export default function SenderPage() {
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
-            {/* HAND ICON ONLY */}
+            {/* HAND ICON ONLY - RETURN FROM CLEAN VIEW */}
             {isCleanView && (
                 <div onClick={() => setIsCleanView(false)} style={{ position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', zIndex: 100, cursor: 'pointer', background: 'rgba(255,255,255,0.9)', padding: '15px', borderRadius: '50%', boxShadow: '0 0 20px gold' }}>
                     <span style={{ fontSize: '2.5rem' }}>✍️</span>
@@ -51,19 +51,21 @@ export default function SenderPage() {
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ width: '95%', maxWidth: isPreview ? '1100px' : '850px', textAlign: 'center' }}>
                         
-                        <div style={{ minHeight: '500px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+                        <div style={{ minHeight: '520px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
                             
-                            {/* LARGE RED GLOWING BOX (NO WIGGLE) */}
+                            {/* TRANSPARENT RED BOX WITH GOLD GLOW */}
                             <div style={{ 
                                 position: 'relative', 
                                 width: '600px', 
                                 pointerEvents: 'none',
-                                filter: 'drop-shadow(0 0 15px gold) drop-shadow(0 0 30px #ff0000)' 
+                                filter: 'drop-shadow(0 0 20px gold)' 
                             }}>
-                                {/* Ensure your bucket has a red-box.png or I can style this white one to look red */}
-                                <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%', filter: 'hue-rotate(320deg) saturate(3)' }} />
-                                
-                                <p style={{ position: 'absolute', bottom: '15px', width: '100%', textAlign: 'center', color: '#fff', fontWeight: 'bold', fontSize: '3.2rem', textShadow: '0 0 20px gold, 2px 2px 4px #000' }}>theVibe.games</p>
+                                {/* CSS trick to make the box red and remove the white background */}
+                                <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ 
+                                    width: '100%', 
+                                    filter: 'hue-rotate(320deg) saturate(3) drop-shadow(0 0 5px red)',
+                                    mixBlendMode: 'multiply' // This removes the white background
+                                }} />
                                 
                                 <div style={{ position: 'absolute', bottom: '100px', left: '5%', right: '5%', display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
                                     {selectedTiles.map((tile, idx) => (
@@ -78,14 +80,14 @@ export default function SenderPage() {
 
                         {!isPreview && (
                             <div style={{ position: 'relative', zIndex: 20 }}>
-                                <div style={{ textAlign: 'left', lineHeight: '1.2', fontSize: '1.4rem', marginBottom: '10px', maxHeight: '55px', overflowY: 'auto', background: 'rgba(255,255,255,0.95)', padding: '12px 25px', borderRadius: '15px' }}>
+                                <div style={{ textAlign: 'left', lineHeight: '1.2', fontSize: '1.4rem', marginBottom: '10px', maxHeight: '55px', overflowY: 'auto', background: 'rgba(255,255,255,0.9)', padding: '12px 25px', borderRadius: '15px', boxShadow: '0 5px 15px rgba(0,0,0,0.3)' }}>
                                     {tokens.map((t, i) => {
                                         const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
                                         const isSel = selectedTiles.includes(clean);
                                         return <span key={i} onClick={() => clean && setSelectedTiles(prev => isSel ? prev.filter(x => x !== clean) : [...prev, clean])} style={{ padding: '2px 5px', borderRadius: '5px', cursor: 'pointer', background: isSel ? '#ff0000' : 'transparent', color: isSel ? '#fff' : '#000' }}>{t}</span>
                                     })}
                                 </div>
-                                <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '100%', height: '45px', borderRadius: '15px', padding: '12px 25px', border: 'none', background: 'rgba(255,255,255,0.95)', fontSize: '1.2rem' }} />
+                                <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '100%', height: '45px', borderRadius: '15px', padding: '12px 25px', border: 'none', background: 'rgba(255,255,255,0.9)', fontSize: '1.2rem', boxShadow: '0 5px 15px rgba(0,0,0,0.3)' }} />
                             </div>
                         )}
                         
@@ -95,7 +97,6 @@ export default function SenderPage() {
                         </div>
                     </div>
 
-                    {/* DYNAMIC SIDEBAR */}
                     <div style={{ marginLeft: '50px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <div style={{ background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)', padding: '15px', borderRadius: '30px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', border: '1px solid gold' }}>
                             {SCENES.map((s) => (
