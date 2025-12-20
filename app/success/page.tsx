@@ -1,8 +1,8 @@
 'use client';
 import { useSearchParams } from 'next/navigation';
-import React from 'react';
+import React, { Suspense } from 'react';
 
-export default function SuccessPage() {
+function SuccessContent() {
     const searchParams = useSearchParams();
     const msg = searchParams.get('msg') || "";
     const scene = searchParams.get('scene') || "loveisall";
@@ -43,5 +43,13 @@ export default function SuccessPage() {
                 </div>
             </div>
         </main>
+    );
+}
+
+export default function SuccessPage() {
+    return (
+        <Suspense fallback={<div style={{color:'white', textAlign:'center', marginTop:'20%'}}>Loading Gift...</div>}>
+            <SuccessContent />
+        </Suspense>
     );
 }
