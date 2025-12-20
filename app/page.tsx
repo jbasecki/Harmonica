@@ -48,24 +48,25 @@ export default function SenderPage() {
 
             {!isCleanView && (
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    {/* Fixed narrow width for the entire central stack */}
+                    <div style={{ width: '320px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         
-                        {/* BOX AREA: EXACTLY the same size as the box */}
-                        <div style={{ position: 'relative', width: '450px', height: '450px', background: 'white', borderRadius: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', boxShadow: '0 0 25px gold' }}>
+                        {/* COMPACT BOX AREA: Exact 320x320 Square */}
+                        <div style={{ position: 'relative', width: '320px', height: '320px', background: 'white', borderRadius: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', boxShadow: '0 0 20px gold' }}>
                             <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" 
-                                     style={{ width: '85%', filter: 'hue-rotate(320deg) saturate(3) drop-shadow(0 0 10px gold)' }} />
+                                     style={{ width: '85%', filter: 'hue-rotate(320deg) saturate(3) drop-shadow(0 0 8px gold)' }} />
                                 
                                 {selectedTiles.length > 0 && (
                                     <>
-                                        {/* Big Gift Bow */}
-                                        <div style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', fontSize: '4.5rem', filter: 'drop-shadow(0 0 10px gold)', zIndex: 5 }}>🎀</div>
+                                        {/* Gift Bow */}
+                                        <div style={{ position: 'absolute', top: '-15px', left: '50%', transform: 'translateX(-50%)', fontSize: '3.5rem', filter: 'drop-shadow(0 0 8px gold)', zIndex: 5 }}>🎀</div>
                                         
-                                        <div style={{ position: 'absolute', bottom: '60px', left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                                        <div style={{ position: 'absolute', bottom: '45px', left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
                                             {selectedTiles.map((tile, idx) => (
-                                                <div key={idx} style={{ display: 'flex', gap: '5px' }}>
-                                                    <img src={getLetterUrl(tile.charAt(0))} style={{ width: '90px', borderRadius: '10px', border: '3px solid gold', boxShadow: '0 0 20px gold' }} />
-                                                    <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '90px', borderRadius: '10px', border: '3px solid gold', boxShadow: '0 0 20px gold' }} />
+                                                <div key={idx} style={{ display: 'flex', gap: '4px' }}>
+                                                    <img src={getLetterUrl(tile.charAt(0))} style={{ width: '65px', borderRadius: '8px', border: '2px solid gold', boxShadow: '0 0 15px gold' }} />
+                                                    <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '65px', borderRadius: '8px', border: '2px solid gold', boxShadow: '0 0 15px gold' }} />
                                                 </div>
                                             ))}
                                         </div>
@@ -74,27 +75,27 @@ export default function SenderPage() {
                             </div>
                         </div>
 
-                        {/* RED BUTTON: Anchored */}
-                        <button onClick={handleSend} style={{ marginTop: '-25px', background: '#ff0000', color: '#fff', padding: '12px 60px', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.4rem', cursor: 'pointer', boxShadow: '0 0 20px rgba(255,0,0,0.9)', zIndex: 30 }}>
+                        {/* RED BUTTON: Anchored and fitted to width */}
+                        <button onClick={handleSend} style={{ width: '100%', marginTop: '-20px', background: '#ff0000', color: '#fff', padding: '12px 0', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.2rem', cursor: 'pointer', boxShadow: '0 0 15px rgba(255,0,0,0.8)', zIndex: 30 }}>
                             Send a Vibe
                         </button>
 
-                        {/* SYMMETRICAL INPUT LINES: Matched to 450px width */}
+                        {/* SYMMETRICAL COMPACT INPUT LINES: Matched to 320px */}
                         {!isPreview && (
-                            <div style={{ width: '450px', marginTop: '25px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                <div style={{ background: '#fff', padding: '12px 20px', borderRadius: '15px', minHeight: '50px', textAlign: 'left', fontSize: '1.2rem', boxShadow: '0 5px 15px rgba(0,0,0,0.3)', width: '100%' }}>
+                            <div style={{ width: '320px', marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <div style={{ background: '#fff', padding: '10px 15px', borderRadius: '12px', minHeight: '40px', textAlign: 'left', fontSize: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.2)', width: '100%', overflowX: 'hidden' }}>
                                     {tokens.map((t, i) => {
                                         const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
                                         const isSel = selectedTiles.includes(clean);
                                         return <span key={i} onClick={() => clean && setSelectedTiles(prev => isSel ? prev.filter(x => x !== clean) : [...prev, clean])} 
-                                                     style={{ padding: '2px 4px', borderRadius: '4px', cursor: 'pointer', background: isSel ? '#ff0000' : 'transparent', color: isSel ? '#fff' : '#000' }}>{t}</span>
+                                                     style={{ padding: '1px 3px', borderRadius: '3px', cursor: 'pointer', background: isSel ? '#ff0000' : 'transparent', color: isSel ? '#fff' : '#000' }}>{t}</span>
                                     })}
                                 </div>
                                 <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." 
-                                          style={{ width: '100%', height: '50px', borderRadius: '15px', padding: '12px 20px', border: 'none', background: '#fff', fontSize: '1.1rem', boxShadow: '0 5px 15px rgba(0,0,0,0.3)', resize: 'none' }} />
+                                          style={{ width: '100%', height: '40px', borderRadius: '12px', padding: '10px 15px', border: 'none', background: '#fff', fontSize: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.2)', resize: 'none' }} />
                                 
-                                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-                                    <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#fff', width: '55px', height: '55px', borderRadius: '50%', border: 'none', cursor: 'pointer', fontSize: '1.6rem', boxShadow: '0 5px 15px rgba(0,0,0,0.2)' }}>
+                                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
+                                    <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#fff', width: '45px', height: '45px', borderRadius: '50%', border: 'none', cursor: 'pointer', fontSize: '1.4rem', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
                                         👁️
                                     </button>
                                 </div>
@@ -102,14 +103,14 @@ export default function SenderPage() {
                         )}
                     </div>
 
-                    {/* SIDEBAR */}
-                    <div style={{ position: 'absolute', right: '40px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <div style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(10px)', padding: '15px', borderRadius: '30px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', border: '1px solid gold' }}>
+                    {/* SIDEBAR GRID - Unaffected */}
+                    <div style={{ position: 'absolute', right: '40px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <div style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(10px)', padding: '12px', borderRadius: '25px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', border: '1px solid gold' }}>
                             {SCENES.map((s) => (
-                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '60px', height: '60px', borderRadius: '15px', border: selectedScene.id === s.id ? '3px solid gold' : '1px solid rgba(255,255,255,0.3)', background: selectedScene.id === s.id ? '#fff' : 'rgba(0,0,0,0.5)', color: selectedScene.id === s.id ? '#000' : '#fff', cursor: 'pointer', fontWeight: 'bold' }}>{s.label}</button>
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '50px', height: '50px', borderRadius: '12px', border: selectedScene.id === s.id ? '2px solid gold' : '1px solid rgba(255,255,255,0.3)', background: selectedScene.id === s.id ? '#fff' : 'rgba(0,0,0,0.5)', color: selectedScene.id === s.id ? '#000' : '#fff', cursor: 'pointer', fontWeight: 'bold' }}>{s.label}</button>
                             ))}
                         </div>
-                        <button onClick={() => setIsCleanView(true)} style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(10px)', border: '1px solid gold', borderRadius: '30px', padding: '20px', cursor: 'pointer', fontSize: '2.5rem', color: '#fff' }}>👁️</button>
+                        <button onClick={() => setIsCleanView(true)} style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(10px)', border: '1px solid gold', borderRadius: '25px', padding: '15px', cursor: 'pointer', fontSize: '2rem', color: '#fff' }}>👁️</button>
                     </div>
                 </div>
             )}
