@@ -1,38 +1,7 @@
-'use client';
-import React, { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-
-const SCENES = [
-    { id: 'one', label: '1' }, { id: 'two', label: '2' }, { id: 'three', label: '3' },
-    { id: 'four', label: '4' }, { id: 'five', label: '5' }, { id: 'six', label: '6' },
-    { id: 'seven', label: '7' }, { id: 'eight', label: '8' }, { id: 'nine', label: '9' },
-    { id: 'ten', label: '10' }, { id: 'eleven', label: '11' }, { id: 'twelve', label: '12' }
-];
+/* ... existing imports and SCENES array ... */
 
 export default function SenderPage() {
-    const [message, setMessage] = useState("");
-    const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
-    const [selectedScene, setSelectedScene] = useState(SCENES[0]);
-    const [isPreview, setIsPreview] = useState(false); // For the Box Preview
-    const [isCleanView, setIsCleanView] = useState(false); // For the Eye toggle
-
-    const tokens = message.split(/(\s+)/);
-    const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
-
-    const handleSend = async () => {
-        try {
-            const res = await fetch('/api/checkout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message, tiles: selectedTiles.join(','), sceneId: selectedScene.id }),
-            });
-            const data = await res.json();
-            if (data.id) {
-                const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-                await stripe?.redirectToCheckout({ sessionId: data.id });
-            }
-        } catch (err) { console.error(err); }
-    };
+    /* ... existing state hooks ... */
 
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
@@ -51,24 +20,24 @@ export default function SenderPage() {
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     
                     {/* MAIN CARD */}
-                    <div style={{ background: 'rgba(255,255,255,0.96)', padding: '30px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '820px' : '580px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.96)', padding: '30px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '850px' : '580px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
                         <h2 style={{ marginBottom: '10px' }}>{isPreview ? "👁️ Preview" : "Vibe Greeting Shop"}</h2>
                         
-                        <div style={{ minHeight: '180px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '25px', flexWrap: 'wrap' }}>
+                        {/* PREVIEW AREA: Enlarged for Bow Visibility */}
+                        <div style={{ minHeight: '220px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '25px', flexWrap: 'wrap', paddingTop: '40px' }}>
                             {isPreview ? (
-                                /* BOX PREVIEW */
                                 selectedTiles.map((tile, idx) => (
-                                    <div key={idx} style={{ position: 'relative', width: '220px' }}>
+                                    <div key={idx} style={{ position: 'relative', width: '280px' }}>
+                                        {/* Typos handled: gifr-box.png */}
                                         <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
-                                        <div style={{ position: 'absolute', bottom: '28px', left: '12px', right: '12px', display: 'flex', justifyContent: 'center', gap: '6px' }}>
-                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '45%', borderRadius: '4px', border: '1.5px solid gold' }} />
-                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '45%', borderRadius: '4px', border: '1.5px solid gold' }} />
+                                        <div style={{ position: 'absolute', bottom: '35px', left: '15px', right: '15px', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '45%', borderRadius: '4px', border: '1.5px solid gold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)' }} />
+                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '45%', borderRadius: '4px', border: '1.5px solid gold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)' }} />
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                /* WORD SELECTION */
-                                <div style={{ textAlign: 'left', lineHeight: '2', fontSize: '1.2rem' }}>
+                                <div style={{ textAlign: 'left', lineHeight: '2', fontSize: '1.2rem', width: '100%' }}>
                                     {tokens.map((t, i) => {
                                         const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
                                         const isSel = selectedTiles.includes(clean);
