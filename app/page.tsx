@@ -18,9 +18,7 @@ export default function SenderPage() {
 
     const tokens = message.split(/(\s+)/);
     const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
-
-    // The box only wiggles when it is empty
-    const shouldWiggle = selectedTiles.length === 0;
+    const isBoxEmpty = selectedTiles.length === 0;
 
     const handleSend = async () => {
         try {
@@ -51,28 +49,28 @@ export default function SenderPage() {
 
             {!isCleanView && (
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ background: 'rgba(255,255,255,0.96)', padding: '20px 30px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '900px' : '650px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
+                    {/* CARD: Reduced padding from 30px to 10px to minimize white space */}
+                    <div style={{ background: 'rgba(255,255,255,0.96)', padding: '10px 20px 20px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '950px' : '700px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
                         
-                        {/* BOX AREA: Padding added at top to show the Bow */}
-                        <div style={{ minHeight: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative', paddingTop: '30px' }}>
+                        <div style={{ minHeight: '480px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
                             
+                            {/* BOX: Enlarged to 580px to fill the card */}
                             <div style={{ 
                                 position: 'relative', 
-                                width: '450px', 
-                                animation: shouldWiggle ? 'slowWiggle 6s infinite ease-in-out' : 'none',
+                                width: '580px', 
+                                animation: isBoxEmpty ? 'slowWiggle 6s infinite ease-in-out' : 'none',
                                 pointerEvents: 'none' 
                             }}>
                                 <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
                                 
-                                {/* Label remains under the box */}
-                                <p style={{ position: 'absolute', bottom: '15px', width: '100%', textAlign: 'center', color: '#ff6600', fontWeight: 'bold', fontSize: '1.8rem', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Send a Vibe</p>
+                                <p style={{ position: 'absolute', bottom: '15px', width: '100%', textAlign: 'center', color: '#ff6600', fontWeight: 'bold', fontSize: '2.2rem', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Send a Vibe</p>
                                 
-                                {/* Alphabet Cards: Shrunken slightly to ensure bow visibility */}
-                                <div style={{ position: 'absolute', bottom: '60px', left: '10%', right: '10%', display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap' }}>
+                                {/* LETTERS: Scaled up to 115px for the massive box */}
+                                <div style={{ position: 'absolute', bottom: '80px', left: '5%', right: '5%', display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap' }}>
                                     {selectedTiles.map((tile, idx) => (
-                                        <div key={idx} style={{ display: 'flex', gap: '5px' }}>
-                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '80px', borderRadius: '8px', border: '2px solid gold', boxShadow: '0 4px 10px rgba(0,0,0,0.4)' }} />
-                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '80px', borderRadius: '8px', border: '2px solid gold', boxShadow: '0 4px 10px rgba(0,0,0,0.4)' }} />
+                                        <div key={idx} style={{ display: 'flex', gap: '10px' }}>
+                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '115px', borderRadius: '12px', border: '3px solid gold', boxShadow: '0 8px 20px rgba(0,0,0,0.4)' }} />
+                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '115px', borderRadius: '12px', border: '3px solid gold', boxShadow: '0 8px 20px rgba(0,0,0,0.4)' }} />
                                         </div>
                                     ))}
                                 </div>
@@ -80,31 +78,32 @@ export default function SenderPage() {
                         </div>
 
                         {!isPreview && (
-                            <div style={{ position: 'relative', zIndex: 20, marginTop: '5px' }}>
-                                <div style={{ textAlign: 'left', lineHeight: '1.6', fontSize: '1.1rem', marginBottom: '8px', maxHeight: '60px', overflowY: 'auto', background: '#fff', padding: '10px', borderRadius: '15px' }}>
+                            <div style={{ position: 'relative', zIndex: 20 }}>
+                                <div style={{ textAlign: 'left', lineHeight: '1.4', fontSize: '1.2rem', marginBottom: '10px', maxHeight: '50px', overflowY: 'auto', background: 'rgba(255,255,255,0.5)', padding: '5px 10px', borderRadius: '10px' }}>
                                     {tokens.map((t, i) => {
                                         const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
                                         const isSel = selectedTiles.includes(clean);
                                         return <span key={i} onClick={() => clean && setSelectedTiles(prev => isSel ? prev.filter(x => x !== clean) : [...prev, clean])} style={{ padding: '2px 4px', borderRadius: '4px', cursor: 'pointer', background: isSel ? '#ff6600' : 'transparent', color: isSel ? '#fff' : '#000' }}>{t}</span>
                                     })}
                                 </div>
-                                <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '100%', height: '45px', borderRadius: '12px', padding: '10px', border: '1px solid #ddd', fontSize: '1rem' }} />
+                                <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message..." style={{ width: '100%', height: '40px', borderRadius: '12px', padding: '10px', border: '1px solid #ddd', fontSize: '1.1rem' }} />
                             </div>
                         )}
                         
                         <div style={{ marginTop: '15px', display: 'flex', gap: '15px', justifyContent: 'center' }}>
-                            <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#eee', padding: '10px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>{isPreview ? '✍️ Edit' : '👁️ Preview'}</button>
-                            <button onClick={handleSend} style={{ background: '#ff6600', color: '#fff', padding: '10px 35px', borderRadius: '50px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Wrap & Send (0.99¢)</button>
+                            <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#eee', padding: '10px 30px', borderRadius: '50px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>{isPreview ? '✍️ Edit' : '👁️ Preview'}</button>
+                            <button onClick={handleSend} style={{ background: '#ff6600', color: '#fff', padding: '10px 45px', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.2rem', cursor: 'pointer' }}>Wrap & Send (0.99¢)</button>
                         </div>
                     </div>
 
-                    <div style={{ marginLeft: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                        <div style={{ background: 'rgba(255,255,255,0.85)', padding: '15px', borderRadius: '25px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                    {/* SIDEBAR GRID */}
+                    <div style={{ marginLeft: '40px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                        <div style={{ background: 'rgba(255,255,255,0.85)', padding: '15px', borderRadius: '25px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
                             {SCENES.map((s) => (
-                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '50px', height: '50px', borderRadius: '12px', border: selectedScene.id === s.id ? '3px solid #ff6600' : '1px solid #ccc', background: '#fff', cursor: 'pointer', fontWeight: 'bold' }}>{s.label}</button>
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '60px', height: '60px', borderRadius: '18px', border: selectedScene.id === s.id ? '4px solid #ff6600' : '1px solid #ccc', background: '#fff', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.1rem' }}>{s.label}</button>
                             ))}
                         </div>
-                        <button onClick={() => setIsCleanView(true)} style={{ background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '20px', padding: '15px', cursor: 'pointer', fontSize: '1.8rem' }}>👁️</button>
+                        <button onClick={() => setIsCleanView(true)} style={{ background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '25px', padding: '20px', cursor: 'pointer', fontSize: '2.5rem' }}>👁️</button>
                     </div>
                 </div>
             )}
