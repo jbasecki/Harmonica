@@ -36,12 +36,10 @@ export default function SenderPage() {
 
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
-            {/* Cinematic Background */}
             <video key={selectedScene.id} autoPlay loop playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
-            {/* Icon-Only Return */}
             {isCleanView && (
                 <div onClick={() => setIsCleanView(false)} style={{ position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', zIndex: 100, cursor: 'pointer', background: 'rgba(255,255,255,0.9)', padding: '15px', borderRadius: '50%', boxShadow: '0 0 20px gold' }}>
                     <span style={{ fontSize: '2.5rem' }}>✍️</span>
@@ -50,54 +48,53 @@ export default function SenderPage() {
 
             {!isCleanView && (
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ width: '100%', maxWidth: '650px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         
-                        {/* BOX AREA: Transparent with Exact Sizing */}
-                        <div style={{ position: 'relative', width: '100%', minHeight: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                            <div style={{ position: 'relative', width: '550px' }}>
+                        {/* BOX AREA: EXACTLY the same size as the box */}
+                        <div style={{ position: 'relative', width: '450px', height: '450px', background: 'white', borderRadius: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', boxShadow: '0 0 25px gold' }}>
+                            <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" 
-                                     style={{ width: '100%', filter: 'hue-rotate(320deg) saturate(3) drop-shadow(0 0 15px gold)', mixBlendMode: 'screen' }} />
+                                     style={{ width: '85%', filter: 'hue-rotate(320deg) saturate(3) drop-shadow(0 0 10px gold)' }} />
                                 
-                                {/* ALPHABET CARDS & MAGICAL BOW */}
                                 {selectedTiles.length > 0 && (
                                     <>
-                                        {/* Big Gift Bow on Top */}
-                                        <div style={{ position: 'absolute', top: '-25px', left: '50%', transform: 'translateX(-50%)', fontSize: '5rem', filter: 'drop-shadow(0 0 10px gold)', zIndex: 5 }}>🎀</div>
+                                        {/* Big Gift Bow */}
+                                        <div style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', fontSize: '4.5rem', filter: 'drop-shadow(0 0 10px gold)', zIndex: 5 }}>🎀</div>
                                         
-                                        <div style={{ position: 'absolute', bottom: '80px', left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap' }}>
+                                        <div style={{ position: 'absolute', bottom: '60px', left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
                                             {selectedTiles.map((tile, idx) => (
-                                                <div key={idx} style={{ display: 'flex', gap: '8px' }}>
-                                                    <img src={getLetterUrl(tile.charAt(0))} style={{ width: '120px', borderRadius: '12px', border: '3px solid gold', boxShadow: '0 0 25px gold' }} />
-                                                    <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '120px', borderRadius: '12px', border: '3px solid gold', boxShadow: '0 0 25px gold' }} />
+                                                <div key={idx} style={{ display: 'flex', gap: '5px' }}>
+                                                    <img src={getLetterUrl(tile.charAt(0))} style={{ width: '90px', borderRadius: '10px', border: '3px solid gold', boxShadow: '0 0 20px gold' }} />
+                                                    <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '90px', borderRadius: '10px', border: '3px solid gold', boxShadow: '0 0 20px gold' }} />
                                                 </div>
                                             ))}
                                         </div>
                                     </>
                                 )}
                             </div>
-
-                            {/* RED BUTTON: Anchored */}
-                            <button onClick={handleSend} style={{ marginTop: '-35px', background: '#ff0000', color: '#fff', padding: '15px 80px', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 0 25px rgba(255,0,0,0.9)', zIndex: 30 }}>
-                                Send a Vibe
-                            </button>
                         </div>
 
-                        {/* ALIGNED WHITE WRITING LINES */}
+                        {/* RED BUTTON: Anchored */}
+                        <button onClick={handleSend} style={{ marginTop: '-25px', background: '#ff0000', color: '#fff', padding: '12px 60px', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.4rem', cursor: 'pointer', boxShadow: '0 0 20px rgba(255,0,0,0.9)', zIndex: 30 }}>
+                            Send a Vibe
+                        </button>
+
+                        {/* SYMMETRICAL INPUT LINES: Matched to 450px width */}
                         {!isPreview && (
-                            <div style={{ width: '550px', marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                <div style={{ background: '#fff', padding: '15px 20px', borderRadius: '15px', minHeight: '55px', textAlign: 'left', fontSize: '1.3rem', boxShadow: '0 5px 15px rgba(0,0,0,0.3)', width: '100%' }}>
+                            <div style={{ width: '450px', marginTop: '25px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <div style={{ background: '#fff', padding: '12px 20px', borderRadius: '15px', minHeight: '50px', textAlign: 'left', fontSize: '1.2rem', boxShadow: '0 5px 15px rgba(0,0,0,0.3)', width: '100%' }}>
                                     {tokens.map((t, i) => {
                                         const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
                                         const isSel = selectedTiles.includes(clean);
                                         return <span key={i} onClick={() => clean && setSelectedTiles(prev => isSel ? prev.filter(x => x !== clean) : [...prev, clean])} 
-                                                     style={{ padding: '2px 5px', borderRadius: '5px', cursor: 'pointer', background: isSel ? '#ff0000' : 'transparent', color: isSel ? '#fff' : '#000' }}>{t}</span>
+                                                     style={{ padding: '2px 4px', borderRadius: '4px', cursor: 'pointer', background: isSel ? '#ff0000' : 'transparent', color: isSel ? '#fff' : '#000' }}>{t}</span>
                                     })}
                                 </div>
                                 <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." 
-                                          style={{ width: '100%', height: '55px', borderRadius: '15px', padding: '15px 20px', border: 'none', background: '#fff', fontSize: '1.2rem', boxShadow: '0 5px 15px rgba(0,0,0,0.3)', resize: 'none' }} />
+                                          style={{ width: '100%', height: '50px', borderRadius: '15px', padding: '12px 20px', border: 'none', background: '#fff', fontSize: '1.1rem', boxShadow: '0 5px 15px rgba(0,0,0,0.3)', resize: 'none' }} />
                                 
-                                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
-                                    <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#fff', width: '60px', height: '60px', borderRadius: '50%', border: 'none', cursor: 'pointer', fontSize: '1.8rem', boxShadow: '0 5px 15px rgba(0,0,0,0.2)' }}>
+                                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+                                    <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#fff', width: '55px', height: '55px', borderRadius: '50%', border: 'none', cursor: 'pointer', fontSize: '1.6rem', boxShadow: '0 5px 15px rgba(0,0,0,0.2)' }}>
                                         👁️
                                     </button>
                                 </div>
