@@ -1,5 +1,7 @@
-{/* Updated Header: It now stays visible until the box is 'Wrapped' */}
-{!isWrapped && (
+'use client';
+
+import React, { useState, useEffect } from 'react';
+// ... rest of your imports
     <div style={{ 
         textAlign: 'center', 
         marginBottom: '25px', 
