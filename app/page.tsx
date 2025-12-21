@@ -77,9 +77,9 @@ export default function SenderPage() {
                             </div>
                         </div>
 
-                        {/* PRICE REMOVED FROM MAIN BUTTON */}
+                        {/* RESTORED YOUR TEXT HERE */}
                         <button onClick={handlePaymentAndSend} style={{ width: '450px', marginTop: '-25px', background: '#0070f3', color: '#fff', padding: '15px 0', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.4rem', cursor: 'pointer', zIndex: 30 }}>
-                            Click Message
+                            TRY TO CLICK ON SOME WORDS
                         </button>
 
                         <div style={{ width: '650px', marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -104,7 +104,6 @@ export default function SenderPage() {
                         <div style={{ display: 'flex', gap: '15px' }}>
                             <button onClick={() => setIsCinematicView(true)} style={{ background: 'rgba(0,0,0,0.8)', border: '2px solid #0070f3', borderRadius: '30px', padding: '15px 25px', cursor: 'pointer', fontSize: '2rem', color: '#fff', boxShadow: '0 0 15px gold' }}>👁️</button>
                             
-                            {/* PRICE ATTACHED TO SEND BUTTON */}
                             <button onClick={handlePaymentAndSend} style={{ background: '#0070f3', border: '2px solid #fff', borderRadius: '30px', padding: '10px 25px', cursor: 'pointer', fontSize: '1.1rem', color: '#fff', fontWeight: 'bold' }}>
                                 SEND (0.99¢)
                             </button>
