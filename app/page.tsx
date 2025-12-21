@@ -7,27 +7,27 @@ export default function SenderPage() {
 
     const handleWrap = async () => {
         console.log("Wrapping vibe with message:", message);
-        // This will trigger your Stripe checkout flow next
+        // This will trigger your live Stripe checkout next
     };
 
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
-            {/* 1. SNOWMAN VIDEO BACKGROUND */}
+            {/* 1. SNOWMAN VIDEO (The Background Layer) */}
             <video 
                 autoPlay loop muted playsInline 
                 style={{ 
-                    position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', 
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
                     objectFit: 'cover', zIndex: 1 
                 }}
             >
                 <source src="https://storage.googleapis.com/simple-bucket-27/snowman.mp4" type="video/mp4" />
             </video>
 
-            {/* 2. THE OVERLAY CONTENT */}
+            {/* 2. THE INTERACTIVE LAYERS (The Foreground) */}
             <div style={{ zIndex: 10, position: 'relative', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                 
-                {/* NARRATIVE HEADER */}
+                {/* THE NEW HEADER YOU LIKED */}
                 <div style={{ textAlign: 'center', paddingTop: '60px' }}>
                     <h1 style={{ color: '#fff', fontSize: '3rem', fontWeight: '900', textShadow: '0 0 20px #0070f3', margin: 0 }}>
                         Sending a Heart in a Box
@@ -37,16 +37,16 @@ export default function SenderPage() {
                     </p>
                 </div>
 
-                {/* INTERACTIVE BOX & INPUT AREA */}
+                {/* THE GIFT BOX AND MESSAGE AREA */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: '420px', padding: '0 20px' }}>
                     
-                    {/* BLUE BOX IMAGE */}
+                    {/* RESTORED BLUE BOX */}
                     <img 
                         src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" 
                         style={{ width: '300px', marginBottom: '30px', filter: 'drop-shadow(0 0 20px #0070f3)' }} 
                     />
 
-                    {/* SECRET MESSAGE INPUT */}
+                    {/* LIVE MESSAGE INPUT */}
                     <textarea 
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
@@ -58,7 +58,7 @@ export default function SenderPage() {
                         }}
                     />
 
-                    {/* WRAP BUTTON */}
+                    {/* THE WRAP BUTTON */}
                     <button 
                         onClick={handleWrap}
                         style={{
