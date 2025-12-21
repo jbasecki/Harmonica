@@ -40,6 +40,7 @@ export default function SenderPage() {
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
+            {/* Hand Icon Return */}
             {isCleanView && (
                 <div onClick={() => setIsCleanView(false)} style={{ position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', zIndex: 100, cursor: 'pointer', background: 'rgba(0,0,0,0.85)', padding: '15px', borderRadius: '50%', boxShadow: '0 0 20px gold', border: '1px solid gold' }}>
                     <span style={{ fontSize: '2.5rem' }}>✍️</span>
@@ -48,20 +49,20 @@ export default function SenderPage() {
 
             {!isCleanView && (
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ width: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         
-                        {/* THE BOX FRAME: Compact and snug */}
-                        <div style={{ position: 'relative', width: '500px', minHeight: '400px', background: 'rgba(0,0,0,0.8)', borderRadius: '25px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid gold', boxShadow: '0 0 30px rgba(0,0,0,0.5)' }}>
+                        {/* COMPACT BOX: 400px width */}
+                        <div style={{ position: 'relative', width: '400px', minHeight: '350px', background: 'rgba(0,0,0,0.8)', borderRadius: '25px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid gold', boxShadow: '0 0 30px rgba(0,0,0,0.5)' }}>
                             <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <img src="https://storage.googleapis.com/simple-bucket-27/re-box.png" 
-                                     style={{ width: '90%', mixBlendMode: 'screen', filter: 'drop-shadow(0 0 10px gold)' }} />
+                                     style={{ width: '90%', filter: 'drop-shadow(0 0 10px gold)' }} />
                                 
                                 {selectedTiles.length > 0 && (
-                                    <div style={{ position: 'absolute', bottom: '65px', left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                                    <div style={{ position: 'absolute', bottom: '60px', left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
                                         {selectedTiles.map((tile, idx) => (
-                                            <div key={idx} style={{ display: 'flex', gap: '6px' }}>
-                                                <img src={getLetterUrl(tile.charAt(0))} style={{ width: '90px', borderRadius: '10px', border: '2.5px solid gold', boxShadow: '0 0 15px gold' }} />
-                                                <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '90px', borderRadius: '10px', border: '2.5px solid gold', boxShadow: '0 0 15px gold' }} />
+                                            <div key={idx} style={{ display: 'flex', gap: '5px' }}>
+                                                <img src={getLetterUrl(tile.charAt(0))} style={{ width: '80px', borderRadius: '10px', border: '2px solid gold', boxShadow: '0 0 15px gold' }} />
+                                                <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '80px', borderRadius: '10px', border: '2px solid gold', boxShadow: '0 0 15px gold' }} />
                                             </div>
                                         ))}
                                     </div>
@@ -70,26 +71,26 @@ export default function SenderPage() {
                         </div>
 
                         {/* RED BUTTON: Anchored */}
-                        <button onClick={handleSend} style={{ width: '100%', marginTop: '-25px', background: '#e60073', color: '#fff', padding: '15px 0', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 0 25px rgba(230,0,115,0.8)', zIndex: 30 }}>
+                        <button onClick={handleSend} style={{ width: '400px', marginTop: '-25px', background: '#e60073', color: '#fff', padding: '15px 0', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 0 25px rgba(230,0,115,0.8)', zIndex: 30 }}>
                             Send a Vibe
                         </button>
 
-                        {/* SYMMETRICAL WRITING LINES: Exactly 500px */}
+                        {/* WIDER WRITING LINES: 650px width */}
                         {!isPreview && (
-                            <div style={{ width: '500px', marginTop: '25px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                <div style={{ background: 'rgba(0,0,0,0.85)', color: '#fff', padding: '12px 20px', borderRadius: '15px', minHeight: '50px', textAlign: 'left', fontSize: '1.2rem', border: '1px solid gold' }}>
+                            <div style={{ width: '650px', marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                                <div style={{ background: 'rgba(0,0,0,0.85)', color: '#fff', padding: '15px 25px', borderRadius: '15px', minHeight: '55px', textAlign: 'left', fontSize: '1.3rem', border: '1px solid gold' }}>
                                     {tokens.map((t, i) => {
                                         const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
                                         const isSel = selectedTiles.includes(clean);
                                         return <span key={i} onClick={() => clean && setSelectedTiles(prev => isSel ? prev.filter(x => x !== clean) : [...prev, clean])} 
-                                                     style={{ padding: '2px 4px', borderRadius: '4px', cursor: 'pointer', background: isSel ? '#e60073' : 'transparent', color: '#fff' }}>{t}</span>
+                                                     style={{ padding: '2px 5px', borderRadius: '5px', cursor: 'pointer', background: isSel ? '#e60073' : 'transparent', color: '#fff' }}>{t}</span>
                                     })}
                                 </div>
                                 <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." 
-                                          style={{ width: '100%', height: '50px', borderRadius: '15px', padding: '12px 20px', border: '1px solid gold', background: 'rgba(0,0,0,0.85)', color: '#fff', fontSize: '1.1rem', resize: 'none' }} />
+                                          style={{ width: '100%', height: '60px', borderRadius: '15px', padding: '15px 25px', border: '1px solid gold', background: 'rgba(0,0,0,0.85)', color: '#fff', fontSize: '1.2rem', resize: 'none' }} />
                                 
                                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-                                    <button onClick={() => setIsPreview(!isPreview)} style={{ background: 'rgba(0,0,0,0.85)', width: '55px', height: '55px', borderRadius: '50%', border: '1px solid gold', cursor: 'pointer', fontSize: '1.6rem', color: '#fff' }}>
+                                    <button onClick={() => setIsPreview(!isPreview)} style={{ background: 'rgba(0,0,0,0.85)', width: '65px', height: '65px', borderRadius: '50%', border: '1px solid gold', cursor: 'pointer', fontSize: '1.8rem', color: '#fff' }}>
                                         👁️
                                     </button>
                                 </div>
@@ -97,14 +98,14 @@ export default function SenderPage() {
                         )}
                     </div>
 
-                    {/* SIDEBAR GRID */}
-                    <div style={{ position: 'absolute', right: '40px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <div style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', padding: '15px', borderRadius: '30px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', border: '2px solid gold' }}>
+                    {/* Sidebar */}
+                    <div style={{ position: 'absolute', right: '50px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <div style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', padding: '20px', borderRadius: '35px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', border: '2px solid gold' }}>
                             {SCENES.map((s) => (
-                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '55px', height: '55px', borderRadius: '15px', border: selectedScene.id === s.id ? '3px solid gold' : '1px solid rgba(255,255,255,0.2)', background: selectedScene.id === s.id ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.5)', color: selectedScene.id === s.id ? '#000' : '#fff', cursor: 'pointer', fontWeight: 'bold' }}>{s.label}</button>
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '65px', height: '65px', borderRadius: '18px', border: selectedScene.id === s.id ? '3px solid gold' : '1px solid rgba(255,255,255,0.2)', background: selectedScene.id === s.id ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.5)', color: selectedScene.id === s.id ? '#000' : '#fff', cursor: 'pointer', fontWeight: 'bold' }}>{s.label}</button>
                             ))}
                         </div>
-                        <button onClick={() => setIsCleanView(true)} style={{ background: 'rgba(0,0,0,0.8)', border: '2px solid gold', borderRadius: '30px', padding: '20px', cursor: 'pointer', fontSize: '2.2rem', color: '#fff' }}>👁️</button>
+                        <button onClick={() => setIsCleanView(true)} style={{ background: 'rgba(0,0,0,0.8)', border: '2px solid gold', borderRadius: '35px', padding: '25px', cursor: 'pointer', fontSize: '2.8rem', color: '#fff' }}>👁️</button>
                     </div>
                 </div>
             )}
