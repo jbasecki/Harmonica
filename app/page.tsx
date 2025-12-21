@@ -53,8 +53,8 @@ export default function SenderPage() {
                         {/* BOX AREA: Darkened Background and Snug Fit */}
                         <div style={{ position: 'relative', width: '100%', minHeight: '420px', background: 'rgba(0,0,0,0.7)', borderRadius: '25px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid rgba(255, 215, 0, 0.3)', boxShadow: '0 0 30px rgba(0,0,0,0.5)' }}>
                             <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center' }}>
-                                {/* Updated filename to re-box.png */}
-                                <img src="https://storage.googleapis.com/simple-bucket-27/re-box.png" 
+                                {/* Transparency trick: multiply blend removes the white background from your bucket image */}
+                                <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" 
                                      style={{ width: '85%', mixBlendMode: 'multiply', filter: 'drop-shadow(0 0 12px gold)' }} />
                                 
                                 {selectedTiles.length > 0 && (
@@ -70,7 +70,7 @@ export default function SenderPage() {
                             </div>
                         </div>
 
-                        {/* RED SEND BUTTON: Matched to magenta box */}
+                        {/* RED SEND BUTTON: Matched to the new box color */}
                         <button onClick={handleSend} style={{ marginTop: '-25px', background: '#e60073', color: '#fff', padding: '15px 100px', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.6rem', cursor: 'pointer', boxShadow: '0 0 25px rgba(230,0,115,0.7)', zIndex: 30 }}>
                             Send a Vibe
                         </button>
