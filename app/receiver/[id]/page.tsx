@@ -9,41 +9,6 @@ const SCENES = [
     { id: 'seven', label: '7' }, { id: 'eight', label: '8' }, { id: 'nine', label: '9' },
     { id: 'ten', label: '10' }, { id: 'eleven', label: '11' }, { id: 'twelve', label: '12' }
 ];
-{/* MAIN INTERACTION AREA */}
-<div style={{ 
-    background: 'rgba(0,0,0,0.85)', // Darker for better contrast
-    borderRadius: '20px',
-    padding: '20px',
-    zIndex: 10,
-    width: '100%',
-    maxWidth: '450px',
-    textAlign: 'center'
-}}>
-    {/* INTEGRATED HEADER */}
-    <h2 style={{ 
-        color: '#fff', 
-        fontSize: '1.5rem', 
-        marginBottom: '5px', 
-        textShadow: '0 0 10px #0070f3' 
-    }}>
-        Sending a Heart in a Box
-    </h2>
-
-    {/* NEW TINY INSTRUCTION */}
-    <p style={{ 
-        color: '#0070f3', 
-        fontSize: '0.9rem', 
-        fontStyle: 'italic', 
-        marginBottom: '15px' 
-    }}>
-        Click on one or two words to send them to the box:
-    </p>
-
-    {/* YOUR COMPOSING LINE (The one that lets them click words) */}
-    <div style={{ marginBottom: '20px' }}>
-        {/* Your existing word-mapping code goes here */}
-    </div>
-</div>
 
 export default function SenderPage() {
     const [message, setMessage] = useState("");
@@ -118,7 +83,7 @@ export default function SenderPage() {
                         </div>
                     </div>
 
-                    {/* WRAP BUTTON (0.99¢) */}
+                    {/* Click on a few words to send them into the box of hearts!*/}
                     <button onClick={handleWrap} style={{ background: '#0070f3', color: '#fff', border: 'none', padding: '15px 50px', borderRadius: '50px', fontSize: '1.4rem', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 0 20px #0070f3' }}>
                         Wrap Message (0.99¢)
                     </button>
