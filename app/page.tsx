@@ -1,4 +1,4 @@
-'use client'; // Line 1: Crucial for interactivity
+'use client';
 
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
@@ -17,7 +17,6 @@ export default function SenderPage() {
 
     const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
 
-    // THE LIVE CONNECTION TO STRIPE
     const handleWrap = async () => {
         try {
             const response = await fetch('/api/checkout', {
@@ -29,25 +28,22 @@ export default function SenderPage() {
                     sceneId: selectedScene.id
                 }),
             });
-
             const session = await response.json();
-            
-            // This pulls your 'pk_live' key from Vercel
             const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
             if (stripe) {
                 await stripe.redirectToCheckout({ sessionId: session.id });
             }
         } catch (err) {
-            console.error("Payment failed to initialize:", err);
-            alert("Checkout could not start. Check your Vercel Keys!");
+            console.error("Payment failed:", err);
         }
     };
 
     const toggleTile = (word: string) => {
-        if (selectedTiles.includes(word)) {
-            setSelectedTiles(selectedTiles.filter(t => t !== word));
+        const cleanWord = word.replace(/[.,!?;]/g, "");
+        if (selectedTiles.includes(cleanWord)) {
+            setSelectedTiles(selectedTiles.filter(t => t !== cleanWord));
         } else if (selectedTiles.length < 2) {
-            setSelectedTiles([...selectedTiles, word]);
+            setSelectedTiles([...selectedTiles, cleanWord]);
         }
     };
 
@@ -56,57 +52,66 @@ export default function SenderPage() {
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
             
-            {/* 1. CINEMATIC BACKGROUND */}
+            {/* BACKGROUND SCENE */}
             <video key={selectedScene.id} autoPlay loop muted playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
-            {/* 2. INTERACTIVE CORE */}
-            <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 
-                <div style={{ width: '100%', maxWidth: '500px', background: 'rgba(0,0,0,0.85)', padding: '30px', borderRadius: '30px', border: '2px solid #0070f3', textAlign: 'center', boxShadow: '0 0 40px rgba(0,112,243,0.5)' }}>
+                {/* 1. THE KING: BLUE BOX & RHOMBOID TILES */}
+                <div style={{ position: 'relative', width: '450px', display: 'flex', justifyContent: 'center', marginBottom: '40px' }}>
+                    <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '100%', filter: 'drop-shadow(0 0 20px #0070f3)' }} />
                     
-                    <h1 style={{ color: '#fff', fontSize: '1.8rem', margin: '0 0 5px 0', textShadow: '0 0 10px #0070f3' }}>
-                        Sending a Heart in a Box
-                    </h1>
+                    {/* RHOMBOID LETTER LAYER */}
+                    <div style={{ position: 'absolute', bottom: '80px', display: 'flex', gap: '15px', perspective: '1000px' }}>
+                        {selectedTiles.map((tile, i) => (
+                            <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', gap: '4px' }}>
+                                    <img src={getLetterUrl(tile.charAt(0))} style={{ width: '65px', borderRadius: '5px', border: '2px solid #0070f3', boxShadow: '0 0 15px #0070f3', transform: 'rotateY(20deg) skewY(-4deg)' }} />
+                                    <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '65px', borderRadius: '5px', border: '2px solid #0070f3', boxShadow: '0 0 15px #0070f3', transform: 'rotateY(-20deg) skewY(4deg)' }} />
+                                </div>
+                                {/* THE IMPORTANT TRANSLATION TAG */}
+                                <span style={{ color: '#0070f3', fontSize: '0.8rem', fontWeight: 'bold', background: 'rgba(0,0,0,0.8)', padding: '2px 8px', borderRadius: '8px', marginTop: '8px' }}>{tile}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
-                    <p style={{ color: '#0070f3', fontSize: '0.9rem', fontWeight: 'bold', fontStyle: 'italic', margin: '0 0 20px 0' }}>
-                        click on one or two words to send them to the box:
+                {/* 2. THE COMPOSING AREA */}
+                <div style={{ width: '90%', maxWidth: '550px', background: 'rgba(0,0,0,0.7)', padding: '25px', borderRadius: '20px', border: '1px solid #333', textAlign: 'center' }}>
+                    
+                    <p style={{ color: '#0070f3', fontSize: '1rem', fontWeight: 'bold', marginBottom: '15px' }}>
+                        click on some words to send them to the gift box
                     </p>
 
-                    <div style={{ minHeight: '40px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', marginBottom: '15px' }}>
-                        {tokens.map((token, i) => (
-                            <button key={i} onClick={() => toggleTile(token)} style={{ background: selectedTiles.includes(token) ? '#0070f3' : 'transparent', color: selectedTiles.includes(token) ? '#fff' : '#0070f3', border: '1px solid #0070f3', borderRadius: '8px', padding: '4px 10px', cursor: 'pointer', fontSize: '0.9rem' }}>
-                                {token}
-                            </button>
-                        ))}
+                    <div style={{ minHeight: '40px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', marginBottom: '20px' }}>
+                        {tokens.map((token, i) => {
+                            const clean = token.replace(/[.,!?;]/g, "");
+                            return (
+                                <button key={i} onClick={() => toggleTile(clean)} style={{ background: selectedTiles.includes(clean) ? '#0070f3' : 'transparent', color: selectedTiles.includes(clean) ? '#fff' : '#0070f3', border: '1px solid #0070f3', borderRadius: '8px', padding: '5px 12px', cursor: 'pointer' }}>
+                                    {token}
+                                </button>
+                            );
+                        })}
                     </div>
 
                     <textarea 
                         value={message} 
                         onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Type your secret message here..."
-                        style={{ width: '100%', height: '80px', background: 'rgba(255,255,255,0.05)', border: '1px solid #333', borderRadius: '12px', color: '#fff', padding: '12px', marginBottom: '20px', outline: 'none' }}
+                        placeholder="Type your message..."
+                        style={{ width: '100%', height: '70px', background: 'rgba(255,255,255,0.05)', border: '1px solid #444', borderRadius: '10px', color: '#fff', padding: '10px', marginBottom: '20px', outline: 'none' }}
                     />
 
-                    <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-                        <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '180px', filter: 'drop-shadow(0 0 15px #0070f3)' }} />
-                        <div style={{ position: 'absolute', bottom: '35px', display: 'flex', gap: '8px' }}>
-                            {selectedTiles.map((tile, i) => (
-                                <img key={i} src={getLetterUrl(tile.charAt(0))} style={{ width: '40px', border: '2px solid #0070f3', borderRadius: '5px', boxShadow: '0 0 10px #0070f3' }} />
-                            ))}
-                        </div>
-                    </div>
-
-                    <button onClick={handleWrap} style={{ background: '#0070f3', color: '#fff', border: 'none', padding: '15px 50px', borderRadius: '50px', fontSize: '1.4rem', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 0 20px #0070f3' }}>
-                        Wrap Message (0.99¢)
+                    <button onClick={handleWrap} style={{ background: '#0070f3', color: '#fff', border: 'none', padding: '15px 60px', borderRadius: '50px', fontSize: '1.5rem', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 0 20px #0070f3' }}>
+                        WRAP MESSAGE
                     </button>
                 </div>
 
-                {/* SCENE SELECTOR */}
-                <div style={{ marginLeft: '40px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', background: 'rgba(0,0,0,0.6)', padding: '15px', borderRadius: '20px', border: '1px solid #333' }}>
+                {/* SCENE SELECTOR (Bottom Right) */}
+                <div style={{ position: 'absolute', bottom: '20px', right: '20px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', background: 'rgba(0,0,0,0.6)', padding: '10px', borderRadius: '15px' }}>
                     {SCENES.map(scene => (
-                        <button key={scene.id} onClick={() => setSelectedScene(scene)} style={{ width: '50px', height: '50px', borderRadius: '10px', background: selectedScene.id === scene.id ? '#0070f3' : '#222', color: '#fff', border: 'none', cursor: 'pointer' }}>
+                        <button key={scene.id} onClick={() => setSelectedScene(scene)} style={{ width: '40px', height: '40px', borderRadius: '8px', background: selectedScene.id === scene.id ? '#0070f3' : '#222', color: '#fff', border: 'none', cursor: 'pointer' }}>
                             {scene.label}
                         </button>
                     ))}
