@@ -24,7 +24,53 @@ export default function SenderPage() {
             <video key={selectedScene.id} autoPlay loop playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
+{/* Narrative Header Section */}
+{!isCinematicView && (
+    <div style={{ textAlign: 'center', marginBottom: '25px', zIndex: 20 }}>
+        <h1 style={{ 
+            color: '#fff', 
+            fontSize: '3rem', 
+            fontWeight: '900', 
+            textShadow: '0 0 20px #0070f3',
+            margin: '0',
+            letterSpacing: '-1px'
+        }}>
+            Sending a Heart in a Box
+        </h1>
+        <p style={{ 
+            color: '#0070f3', 
+            fontSize: '1.4rem', 
+            fontWeight: 'bold', 
+            marginTop: '8px',
+            textTransform: 'uppercase',
+            letterSpacing: '2px'
+        }}>
+            — Send a Vibe —
+        </p>
+    </div>
+)}
 
+{/* CENTRAL BOX AREA */}
+<div style={{ position: 'relative', width: '450px', minHeight: '400px', background: 'rgba(0,0,0,0.5)', borderRadius: '25px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid #0070f3', perspective: '1000px', boxShadow: '0 0 30px rgba(0,112,243,0.4)' }}>
+    <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '90%', filter: 'drop-shadow(0 0 15px rgba(0, 112, 243, 0.6))' }} />
+        
+        {/* The 3D Rhomboid Letters */}
+        {selectedTiles.length > 0 && (
+            <div style={{ position: 'absolute', bottom: '70px', left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                {selectedTiles.map((tile, idx) => (
+                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', gap: '4px' }}>
+                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '80px', borderRadius: '5px', border: '2px solid #0070f3', boxShadow: '0 0 15px #0070f3', transform: 'rotateY(20deg) skewY(-4deg)' }} />
+                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '80px', borderRadius: '5px', border: '2px solid #0070f3', boxShadow: '0 0 15px #0070f3', transform: 'rotateY(-20deg) skewY(4deg)' }} />
+                        </div>
+                        <span style={{ color: '#0070f3', fontSize: '0.9rem', fontWeight: 'bold', background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: '10px', marginTop: '5px' }}>{tile}</span>
+                    </div>
+                ))}
+            </div>
+        )}
+    </div>
+</div>
             {/* CINEMATIC OVERLAY: Only the Writing Hand appears to go back */}
             {isCinematicView && (
                 <div style={{ position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', zIndex: 100 }}>
