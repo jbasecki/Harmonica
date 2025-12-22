@@ -28,7 +28,7 @@ export async function POST(req: Request) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: 'price_1SgwZAJjJj9v8YFVKRZ9yWlx', // Verified ID
+          price: '1SgwXNJjJj9v8YFVXPLo4eFK, // Verified ID
           quantity: 1,
         },
       ],
