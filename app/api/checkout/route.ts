@@ -12,23 +12,28 @@ export async function POST(req: Request) {
     const { message, tiles, sceneId } = await req.json();
     const id = uuidv4();
 
-    // Saves the message to your vibes table
-    await sql`
-      INSERT INTO vibes (id, message, tiles, scene_id, paid)
-      VALUES (${id}, ${message}, ${JSON.stringify(tiles)}, ${sceneId}, false)
-    `;
+    // 1. Save to database FIRST
+    try {
+      await sql`
+        INSERT INTO vibes (id, message, tiles, scene_id, paid)
+        VALUES (${id}, ${message}, ${JSON.stringify(tiles)}, ${sceneId}, false)
+      `;
+    } catch (dbError) {
+      console.error("Database Error:", dbError);
+      return NextResponse.json({ error: "Database failed to save vibe." }, { status: 500 });
+    }
 
+    // 2. Create Stripe Session SECOND
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
-          // YOUR LIVE STRIPE ID FROM SCREENSHOT
-          price: 'price_1SgwZAJjJj9v8YFVKRZ9yWlx', 
+          price: 'price_1SgwZAJjJj9v8YFVKRZ9yWlx', // Verified ID
           quantity: 1,
         },
       ],
       mode: 'payment',
-      // HARDCODED URLS TO PREVENT "INVALID URL" ERROR
+      // Explicitly hardcoded to avoid "Processing Error"
       success_url: `https://vibe-letter-final-clean.vercel.app/success?id=${id}`,
       cancel_url: `https://vibe-letter-final-clean.vercel.app`,
       metadata: { vibeId: id },
@@ -36,7 +41,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ id: session.id });
   } catch (err: any) {
-    console.error(err);
+    console.error("Stripe Error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
