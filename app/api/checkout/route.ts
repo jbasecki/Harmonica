@@ -13,27 +13,21 @@ export async function POST(req: Request) {
     const id = uuidv4();
 
     // 1. Save to database FIRST
-    try {
-      await sql`
-        INSERT INTO vibes (id, message, tiles, scene_id, paid)
-        VALUES (${id}, ${message}, ${JSON.stringify(tiles)}, ${sceneId}, false)
-      `;
-    } catch (dbError) {
-      console.error("Database Error:", dbError);
-      return NextResponse.json({ error: "Database failed to save vibe." }, { status: 500 });
-    }
+    await sql`
+      INSERT INTO vibes (id, message, tiles, scene_id, paid)
+      VALUES (${id}, ${message}, ${JSON.stringify(tiles)}, ${sceneId}, false)
+    `;
 
     // 2. Create Stripe Session SECOND
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
-          price: '1SgwXNJjJj9v8YFVXPLo4eFK, // Verified ID
+          price: 'price_1SgwXNJjJj9v8YFVXPLo4eFK', // Fixed Price ID
           quantity: 1,
         },
       ],
       mode: 'payment',
-      // Explicitly hardcoded to avoid "Processing Error"
       success_url: `https://vibe-letter-final-clean.vercel.app/success?id=${id}`,
       cancel_url: `https://vibe-letter-final-clean.vercel.app`,
       metadata: { vibeId: id },
