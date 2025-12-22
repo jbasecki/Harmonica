@@ -56,79 +56,65 @@ export default function SenderPage() {
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
-            {/* SOUND BUTTON */}
-            <button onClick={toggleAudio} style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 100, background: 'rgba(0,0,0,0.6)', border: '1px solid #0070f3', borderRadius: '50%', width: '50px', height: '50px', color: '#fff', fontSize: '1.5rem', cursor: 'pointer' }}>
+            {/* SOUND BUTTON (TOP LEFT) */}
+            <button onClick={toggleAudio} style={{ position: 'absolute', top: '15px', left: '15px', zIndex: 100, background: 'rgba(0,0,0,0.6)', border: '1px solid #0070f3', borderRadius: '50%', width: '44px', height: '44px', color: '#fff', cursor: 'pointer' }}>
                 {isMuted ? '🔇' : '🔊'}
             </button>
 
+            {/* RETURN FROM EYE BUTTON (TOP RIGHT) */}
             {isCinematicView && (
-                <button onClick={() => setIsCinematicView(false)} style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 100, background: 'rgba(0,0,0,0.6)', border: '1px solid #fff', borderRadius: '50%', width: '50px', height: '50px', color: '#fff', fontSize: '1.2rem', cursor: 'pointer' }}>✕</button>
+                <button onClick={() => setIsCinematicView(false)} style={{ position: 'absolute', top: '15px', right: '15px', zIndex: 100, background: 'rgba(0,0,0,0.6)', border: '1px solid #fff', borderRadius: '50%', width: '44px', height: '44px', color: '#fff', fontSize: '1.2rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
             )}
 
             {!isCinematicView && (
-                <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '10px' }}>
                     
                     {/* TITLE 1 */}
-                    <div style={{ background: '#0070f3', color: '#fff', padding: '10px 30px', borderRadius: '50px', fontWeight: 'bold', marginBottom: '15px', fontSize: '1.1rem', boxShadow: '0 4px 15px rgba(0,0,0,0.3)' }}>SEND A HEART IN A BOX</div>
+                    <div style={{ background: '#0070f3', color: '#fff', padding: '8px 20px', borderRadius: '50px', fontWeight: 'bold', marginBottom: '10px', fontSize: '0.8rem' }}>SEND A HEART IN A BOX</div>
 
-                   // ... (keep imports and SCENES same as before)
-
-// Inside the return block, replace the Letter mapping with this:
-{selectedTiles.map((tile, idx) => (
-    <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        {/* LARGER RHOMBOID WITH GLOW */}
-        <div style={{ 
-            display: 'flex', 
-            gap: '6px', 
-            transform: 'perspective(800px) rotateX(25deg) rotateY(-20deg)',
-            filter: 'drop-shadow(0 0 15px rgba(0, 112, 243, 0.8))' // The Blue Glow
-        }}>
-            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '85px', border: '2px solid #0070f3', borderRadius: '12px' }} alt="L" />
-            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '85px', border: '2px solid #0070f3', borderRadius: '12px' }} alt="R" />
-        </div>
-        
-        {/* ENGLISH LABEL UNDERNEATH */}
-        <span style={{ 
-            color: '#fff', 
-            fontSize: '1rem', 
-            fontWeight: 'bold', 
-            marginTop: '15px', 
-            background: 'rgba(0,112,243,0.9)', 
-            padding: '4px 12px', 
-            borderRadius: '8px',
-            textTransform: 'uppercase',
-            boxShadow: '0 0 10px rgba(0,112,243,0.5)'
-        }}>
-            {tile}
-        </span>
-    </div>
-))}
+                    {/* THE ALPHABET AREA: HORIZONTAL, GLOWING RHOMBOIDS */}
+                    <div style={{ width: '100%', display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '30px', margin: '20px 0' }}>
+                        {selectedTiles.map((tile, idx) => (
+                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                {/* THE BOW */}
+                                <div style={{ fontSize: '1.5rem', marginBottom: '-10px', zIndex: 5 }}>🎀</div>
+                                <div style={{ 
+                                    display: 'flex', gap: '5px', 
+                                    transform: 'rotateZ(-5deg) skewX(-15deg)', 
+                                    filter: 'drop-shadow(0 0 12px rgba(0, 112, 243, 0.9))' 
+                                }}>
+                                    <img src={getLetterUrl(tile.charAt(0))} style={{ width: '85px', border: '2px solid #0070f3', borderRadius: '4px' }} />
+                                    <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '85px', border: '2px solid #0070f3', borderRadius: '4px' }} />
+                                </div>
+                                <span style={{ color: '#fff', fontSize: '0.85rem', fontWeight: 'bold', marginTop: '10px', textTransform: 'uppercase' }}>{tile}</span>
+                            </div>
+                        ))}
+                    </div>
 
                     {/* TITLE 2 */}
-                    <div style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 'bold', margin: '20px 0', textShadow: '2px 2px 8px #000' }}>Try to click on a few of your words below:</div>
+                    <div style={{ color: '#fff', fontSize: '0.85rem', margin: '10px 0', textShadow: '1px 1px 2px #000' }}>Try to click on a few of your words below:</div>
 
-                    {/* INPUT AREA */}
-                    <div style={{ width: '95%', maxWidth: '650px' }}>
-                        <div style={{ background: 'rgba(0,0,0,0.85)', color: '#fff', padding: '15px', borderRadius: '15px', border: '1px solid #333', marginBottom: '12px', minHeight: '50px', fontSize: '1rem' }}>
+                    {/* TEXT ENTRY AREA */}
+                    <div style={{ width: '95%', maxWidth: '600px' }}>
+                        <div style={{ background: 'rgba(0,0,0,0.8)', color: '#fff', padding: '10px', borderRadius: '12px', border: '1px solid #333', marginBottom: '8px', minHeight: '35px' }}>
                             {tokens.map((t, i) => {
                                 const clean = t.trim().replace(/[.,!?;:]/g, "");
                                 const isSel = selectedTiles.includes(clean);
-                                return <span key={i} onClick={() => toggleTile(t)} style={{ padding: '3px 6px', cursor: 'pointer', background: isSel ? '#0070f3' : 'transparent', borderRadius: '5px' }}>{t}</span>
+                                return <span key={i} onClick={() => toggleTile(t)} style={{ padding: '2px 4px', cursor: 'pointer', background: isSel ? '#0070f3' : 'transparent', borderRadius: '3px' }}>{t}</span>
                             })}
                         </div>
-                        <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message..." style={{ width: '100%', height: '85px', borderRadius: '15px', padding: '15px', border: '1px solid #0070f3', background: '#111', color: '#fff', fontSize: '1.1rem', resize: 'none', boxSizing: 'border-box' }} />
-                        
-                        <button onClick={handlePaymentAndSend} style={{ width: '100%', marginTop: '15px', background: '#0070f3', color: '#fff', padding: '15px', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.4rem', cursor: 'pointer', boxShadow: '0 4px 20px rgba(0,112,243,0.4)' }}>SEND (0.99¢)</button>
+                        <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message..." style={{ width: '100%', height: '60px', borderRadius: '12px', padding: '10px', background: '#111', border: '1px solid #0070f3', color: '#fff', fontSize: '0.95rem', resize: 'none' }} />
+                        <button onClick={handlePaymentAndSend} style={{ width: '100%', marginTop: '8px', background: '#0070f3', color: '#fff', padding: '12px', borderRadius: '50px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>SEND (0.99¢)</button>
                     </div>
 
                     {/* SCENE PICKER & EYE */}
-                    <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '20px' }}>
-                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '350px' }}>
+                    <div style={{ marginTop: '15px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '300px' }}>
                             {SCENES.map((s) => (
-                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '45px', height: '45px', borderRadius: '12px', border: '1px solid #444', background: selectedScene.id === s.id ? '#0070f3' : '#1a1a1a', color: '#fff', fontSize: '0.9rem', cursor: 'pointer' }}>{s.label}</button>
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #333', background: selectedScene.id === s.id ? '#0070f3' : '#111', color: '#fff', fontSize: '0.7rem' }}>{s.label}</button>
                             ))}
                         </div>
-                        <button onClick={() => setIsCinematicView(true)} style={{ background: 'rgba(0,0,0,0.7)', border: '1px solid #0070f3', borderRadius: '50%', width: '60px', height: '60px', fontSize: '2rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>👁️</button>
+                        <button onClick={() => setIsCinematicView(true)} style={{ background: 'rgba(0,0,0,0.6)', border: '1px solid #0070f3', borderRadius: '50%', width: '44px', height: '44px', fontSize: '1.2rem', cursor: 'pointer' }}>👁️</button>
                     </div>
                 </div>
             )}
