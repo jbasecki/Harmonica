@@ -52,6 +52,7 @@ export default function SenderPage() {
 
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
+            {/* Background Video Layer */}
             <video ref={videoRef} key={selectedScene.id} autoPlay loop playsInline muted={isMuted} style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
@@ -67,28 +68,32 @@ export default function SenderPage() {
             {!isCinematicView && (
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '10px' }}>
                     
-                    <div style={{ background: '#0070f3', color: '#fff', padding: '6px 20px', borderRadius: '50px', fontWeight: 'bold', marginBottom: '10px', fontSize: '0.8rem' }}>SEND A HEART IN A BOX</div>
+                    {/* RESTORED MAIN TITLE */}
+                    <div style={{ background: '#0070f3', color: '#fff', padding: '8px 25px', borderRadius: '50px', fontWeight: 'bold', marginBottom: '15px', fontSize: '0.9rem', textAlign: 'center' }}>SEND A HEART IN A BOX</div>
 
-                    <div style={{ width: '95%', maxWidth: '420px', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '20px', position: 'relative' }}>
+                    <div style={{ width: '95%', maxWidth: '450px', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '20px', position: 'relative' }}>
+                        
+                        {/* THE HARMONICA ALPHABET (Horizontal Alternating Rhomboids) */}
                         {selectedTiles.length > 0 && (
-                            <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginBottom: '10px', zIndex: 20 }}>
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: '-5px', marginBottom: '10px', zIndex: 20 }}>
                                 {selectedTiles.map((tile, idx) => (
-                                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                        <div style={{ fontSize: '1.5rem', marginBottom: '-5px' }}>🎀</div>
+                                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 -2px' }}>
+                                        <div style={{ fontSize: '1.2rem', marginBottom: '-5px' }}>🎀</div>
                                         <div style={{ 
-                                            display: 'flex', gap: '4px', 
-                                            transform: 'rotateZ(-5deg) skewX(-15deg)', 
-                                            filter: 'drop-shadow(0 0 10px rgba(0, 112, 243, 0.9))' 
+                                            display: 'flex', 
+                                            gap: '0px', 
+                                            transform: `perspective(500px) rotateY(${idx % 2 === 0 ? '25deg' : '-25deg'})`,
+                                            filter: 'drop-shadow(0 0 10px rgba(0, 112, 243, 0.9))'
                                         }}>
-                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '60px', border: '1px solid #0070f3', borderRadius: '4px' }} alt="Tile L" />
-                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '60px', border: '1px solid #0070f3', borderRadius: '4px' }} alt="Tile R" />
+                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '60px', border: '1px solid #0070f3', borderRadius: '4px' }} alt="L" />
+                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '60px', border: '1px solid #0070f3', borderRadius: '4px' }} alt="R" />
                                         </div>
-                                        <span style={{ color: '#fff', fontSize: '0.8rem', fontWeight: 'bold', marginTop: '8px' }}>{tile.toUpperCase()}</span>
+                                        <span style={{ color: '#fff', fontSize: '0.8rem', fontWeight: 'bold', marginTop: '10px' }}>{tile.toUpperCase()}</span>
                                     </div>
                                 ))}
                             </div>
                         )}
-                        <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '60%', opacity: 0.6, marginTop: '-20px' }} alt="Gift Box" />
+                        <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '60%', opacity: 0.5, marginTop: '-20px' }} alt="Gift Box" />
                     </div>
 
                     <div style={{ width: '95%', maxWidth: '500px', textAlign: 'center' }}>
@@ -101,7 +106,7 @@ export default function SenderPage() {
                             })}
                         </div>
                         <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message..." style={{ width: '100%', height: '60px', borderRadius: '12px', padding: '10px', background: '#111', border: '1px solid #0070f3', color: '#fff', fontSize: '0.95rem', resize: 'none' }} />
-                        <button onClick={handlePaymentAndSend} style={{ width: '100%', marginTop: '8px', background: '#0070f3', color: '#fff', padding: '12px', borderRadius: '50px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>SEND (0.99¢)</button>
+                        <button onClick={handlePaymentAndSend} style={{ width: '100%', marginTop: '10px', background: '#0070f3', color: '#fff', padding: '12px', borderRadius: '50px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>SEND (0.99¢)</button>
                     </div>
 
                     <div style={{ marginTop: '15px', display: 'flex', alignItems: 'center', gap: '10px' }}>
