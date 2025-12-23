@@ -3,14 +3,14 @@
 export default function SenderPage() {
     /* ... (keep message, selectedTiles, selectedScene, isCinematicView, isMuted states) ... */
 
-    // NEW SIMPLE PAYMENT FUNCTION (No more 404s or Processing Errors)
+    // NEW CLEAN PAYMENT METHOD
     const handlePaymentAndSend = () => {
         if (!message.trim()) { alert("Please type a message first!"); return; }
         
-        // This is your Stripe Payment Link created in your Dashboard
+        // This is your Stripe Payment Link from your Dashboard
         const STRIPE_LINK = "https://buy.stripe.com/your_unique_link_here";
         
-        // Opens the payment in a new tab so your page stays open
+        // Opens in new tab to keep your landing page active and untouched
         window.open(STRIPE_LINK, '_blank');
     };
 
@@ -26,7 +26,7 @@ export default function SenderPage() {
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         
-                        {/* BOX AREA (Kept proportions exactly as they were this morning) */}
+                        {/* BOX AREA (Kept proportions exactly as they were) */}
                         <div style={{ position: 'relative', width: '450px', height: '350px', background: 'rgba(0,0,0,0.4)', borderRadius: '25px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid #0070f3', marginBottom: '15px' }}>
                             <div style={{ position: 'absolute', top: '-20px', width: '70%', background: '#0070f3', color: '#fff', padding: '8px 0', borderRadius: '50px', textAlign: 'center', fontWeight: 'bold', fontSize: '0.8rem' }}>SEND A HEART IN A BOX</div>
                             
