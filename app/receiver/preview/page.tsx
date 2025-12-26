@@ -2,13 +2,19 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
-// This sub-component handles the actual message display
-function PreviewContent() {
+// This handles the cinematic display once the URL data is ready
+function PreviewDisplay() {
     const searchParams = useSearchParams();
-    const message = searchParams.get('message') || "Your message will appear here...";
+    const message = searchParams.get('message') || "Merry Christmas!";
     
+    // We are using 'eleven.mp4' from your bucket
+    // because it is a clean greeting without the ad's call-to-action
+    const videoUrl = "https://storage.googleapis.com/simple-bucket-27/eleven.mp4";
+
     return (
         <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: '#000' }}>
+            
+            {/* 1. ATMOSPHERIC BACKGROUND: Dimmed to 40% */}
             <video
                 autoPlay
                 loop
@@ -19,12 +25,13 @@ function PreviewContent() {
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
-                    opacity: 0.4,
+                    opacity: 0.4, 
                 }}
             >
-                <source src="https://storage.googleapis.com/simple-bucket-27/snowman.mp4" type="video/mp4" />
+                <source src={videoUrl} type="video/mp4" />
             </video>
 
+            {/* 2. PRIORITY WRITING: Large, centered, and readable */}
             <div style={{
                 position: 'relative',
                 zIndex: 10,
@@ -50,11 +57,11 @@ function PreviewContent() {
     );
 }
 
-// The main page wraps everything in Suspense to fix the Vercel error
+// Main page export with Suspense to prevent Vercel Build Errors
 export default function ReceiverPreview() {
     return (
-        <Suspense fallback={<div style={{color: 'white'}}>Loading Preview...</div>}>
-            <PreviewContent />
+        <Suspense fallback={<div style={{color: 'white', padding: '20px'}}>Preparing your digital hug...</div>}>
+            <PreviewDisplay />
         </Suspense>
     );
 }
