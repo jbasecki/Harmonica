@@ -1,43 +1,40 @@
 'use client';
 import React, { useState } from 'react';
 
-export default function CombinedSenderPage() {
+export default function FinalSenderPage() {
     const [message, setMessage] = useState("");
-    const [selectedScene, setSelectedScene] = useState("11"); // Default to the snowman scene
+    const [selectedScene, setSelectedScene] = useState("1"); 
 
     const handlePreview = () => {
-        // This now sends both the message AND the chosen scene number to the preview
         window.open(`/receiver/preview?message=${encodeURIComponent(message)}&scene=${selectedScene}`, '_blank');
     };
 
     return (
         <main style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', padding: '20px' }}>
             <div style={{ backgroundColor: 'blue', padding: '15px', textAlign: 'center', marginBottom: '20px', borderRadius: '8px' }}>
-                Type your message, then pick a background number below.
+                Step 1: Write your message. Step 2: Pick a vibe number. Step 3: See Preview.
             </div>
 
             <textarea 
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="Type your digital hug here..."
-                style={{ width: '100%', height: '120px', borderRadius: '10px', padding: '15px', color: '#000' }}
+                placeholder="Merry Christmas..."
+                style={{ width: '100%', height: '100px', borderRadius: '10px', padding: '15px', color: '#000' }}
             />
 
-            <div style={{ marginTop: '30px' }}>
-                <h3 style={{ fontSize: '0.9rem', opacity: 0.8 }}>BACKGROUNDS</h3>
+            <div style={{ marginTop: '20px' }}>
+                <h3 style={{ fontSize: '0.8rem', opacity: 0.7 }}>BACKGROUND VIBES</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginTop: '10px' }}>
-                    {/* Only using the numbers currently in your bucket for testing */}
-                    {["4", "5", "8", "11"].map((num) => (
+                    {["1", "2", "3", "4", "5", "8"].map((num) => (
                         <button 
                             key={num}
                             onClick={() => setSelectedScene(num)}
                             style={{
-                                padding: '10px',
-                                backgroundColor: selectedScene === num ? '#0070f3' : '#333',
+                                padding: '12px',
+                                backgroundColor: selectedScene === num ? '#0070f3' : '#222',
                                 color: 'white',
-                                border: 'none',
-                                borderRadius: '5px',
-                                cursor: 'pointer'
+                                border: selectedScene === num ? '2px solid white' : '1px solid #444',
+                                borderRadius: '5px'
                             }}
                         >
                             {num}
@@ -48,9 +45,9 @@ export default function CombinedSenderPage() {
 
             <button 
                 onClick={handlePreview} 
-                style={{ width: '100%', marginTop: '30px', padding: '15px', backgroundColor: '#444', color: 'white', borderRadius: '8px', cursor: 'pointer' }}
+                style={{ width: '100%', marginTop: '30px', padding: '18px', backgroundColor: '#333', color: 'white', borderRadius: '8px', fontWeight: 'bold' }}
             >
-                SEE PREVIEW
+                VIEW CINEMATIC PREVIEW
             </button>
         </main>
     );
