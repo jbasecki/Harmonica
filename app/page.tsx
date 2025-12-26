@@ -8,7 +8,7 @@ const ART_SCENES = [
     { id: 'bigfeelings', label: '2' }, { id: 'daffodil-love', label: '6' }, { id: 'giftofheart', label: '7' }, { id: 'happy-holidays', label: '9' }, { id: 'happynewyear26', label: '10' }
 ];
 
-export default function UltimateMeditativeSender() {
+export default function MasterSenderPage() {
     const [message, setMessage] = useState("");
     const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
     const [selectedScene, setSelectedScene] = useState(CLEAN_SCENES[0]);
@@ -34,7 +34,7 @@ export default function UltimateMeditativeSender() {
 
             <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
                 
-                {/* HEART IN A BOX AREA */}
+                {/* 1. THE HEART IN A BOX */}
                 <div style={{ position: 'relative', width: '400px', height: '260px', background: 'rgba(0,0,0,0.5)', borderRadius: '25px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid #0070f3', marginBottom: '10px' }}>
                     <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '55%', opacity: 0.8 }} alt="Box" />
                     <div style={{ position: 'absolute', bottom: '40px', display: 'flex', gap: '8px' }}>
@@ -50,6 +50,7 @@ export default function UltimateMeditativeSender() {
                     </div>
                 </div>
 
+                {/* 2. THE MEDITATIVE INPUT */}
                 <div style={{ width: '100%', maxWidth: '600px', background: 'rgba(0,0,0,0.8)', padding: '15px', borderRadius: '20px', border: '1px solid #0070f3' }}>
                     <div style={{ minHeight: '40px', textAlign: 'center', marginBottom: '10px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
                         {tokens.map((t, i) => {
@@ -69,18 +70,22 @@ export default function UltimateMeditativeSender() {
                             placeholder="Type your meditative message..." 
                             style={{ width: '100%', height: '80px', borderRadius: '10px', padding: '10px', background: '#111', color: '#fff', border: 'none', fontSize: '1rem' }} 
                         />
-                        {/* THE [i] ICON */}
-                        <div title="Vibes transform literal words into meditative associations." style={{ position: 'absolute', bottom: '10px', right: '10px', color: '#0070f3', cursor: 'help', fontWeight: 'bold' }}>[i]</div>
+                        {/* THE MEDITATIVE [i] */}
+                        <div 
+                            title="Meditative communication moves beyond literal words to communicate feelings through abstract associations" 
+                            style={{ position: 'absolute', bottom: '10px', right: '10px', color: '#0070f3', cursor: 'help', fontWeight: 'bold' }}>
+                            [i]
+                        </div>
                     </div>
                 </div>
 
-                {/* TWO GRIDS */}
+                {/* 3. TWO GRIDS */}
                 <div style={{ display: 'flex', gap: '20px', marginTop: '15px' }}>
                     <div>
                         <p style={{ fontSize: '0.6rem', color: '#fff', textAlign: 'center' }}>CLEAN</p>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '5px' }}>
                             {CLEAN_SCENES.map(s => (
-                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '32px', height: '32px', borderRadius: '5px', background: selectedScene.id === s.id ? '#0070f3' : '#333', color: '#fff', border: 'none', fontSize: '0.7rem' }}>{s.label}</button>
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '32px', height: '32px', borderRadius: '5px', background: selectedScene.id === s.id ? '#0070f3' : '#333', color: '#fff', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>{s.label}</button>
                             ))}
                         </div>
                     </div>
@@ -88,7 +93,7 @@ export default function UltimateMeditativeSender() {
                         <p style={{ fontSize: '0.6rem', color: '#fff', textAlign: 'center' }}>ARTISTIC</p>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '5px' }}>
                             {ART_SCENES.map(s => (
-                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '32px', height: '32px', borderRadius: '5px', background: selectedScene.id === s.id ? '#0070f3' : '#333', color: '#fff', border: 'none', fontSize: '0.7rem' }}>{s.label}</button>
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '32px', height: '32px', borderRadius: '5px', background: selectedScene.id === s.id ? '#0070f3' : '#333', color: '#fff', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>{s.label}</button>
                             ))}
                         </div>
                     </div>
@@ -96,10 +101,11 @@ export default function UltimateMeditativeSender() {
 
                 <div style={{ display: 'flex', gap: '15px', marginTop: '20px' }}>
                     <button onClick={() => window.open(`/receiver/preview?message=${encodeURIComponent(message)}&scene=${selectedScene.id}&tiles=${selectedTiles.join(',')}&dim=${dimness}`, '_blank')} 
-                        style={{ padding: '12px 25px', borderRadius: '25px', background: '#fff', color: '#000', fontWeight: 'bold', border: 'none' }}>PREVIEW</button>
-                    <button onClick={() => alert("Stripe documents pending—ready for live test tomorrow!")} 
-                        style={{ padding: '12px 25px', borderRadius: '25px', background: '#0070f3', color: '#fff', fontWeight: 'bold', border: 'none' }}>SEND (0.99¢)</button>
+                        style={{ padding: '12px 25px', borderRadius: '25px', background: '#fff', color: '#000', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>PREVIEW</button>
+                    <button onClick={() => alert("Stripe approval pending—Live sales ready tomorrow!")} 
+                        style={{ padding: '12px 25px', borderRadius: '25px', background: '#0070f3', color: '#fff', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>SEND (0.99¢)</button>
                 </div>
+                <input type="range" min="0.1" max="1" step="0.1" value={dimness} onChange={(e) => setDimness(parseFloat(e.target.value))} style={{ width: '150px', marginTop: '10px' }} />
             </div>
         </main>
     );
