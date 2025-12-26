@@ -58,4 +58,61 @@ export default function UltimateMeditativeSender() {
                     </div>
                 </div>
 
-                {/* 3. VISIBLE TOP LINE & INPUT [cite: image_787101.
+                {/* 3. VISIBLE TOP LINE & INPUT */}
+                <div style={{ width: '100%', maxWidth: '600px', background: 'rgba(0,0,0,0.7)', padding: '15px', borderRadius: '20px', border: '1px solid #0070f3' }}>
+                    <div style={{ minHeight: '40px', textAlign: 'center', marginBottom: '10px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {tokens.map((t, i) => {
+                            const clean = t.trim().replace(/[.,!?;:]/g, "");
+                            const isSel = selectedTiles.includes(clean);
+                            return (
+                                <span key={i} onClick={() => toggleTile(t)} 
+                                    style={{ 
+                                        color: '#fff', 
+                                        padding: '4px 10px', 
+                                        cursor: 'pointer', 
+                                        background: isSel ? '#0070f3' : 'rgba(255,255,255,0.3)', 
+                                        borderRadius: '8px', 
+                                        margin: '2px',
+                                        fontSize: '0.9rem',
+                                        fontWeight: 'bold',
+                                        border: isSel ? '1px solid white' : '1px solid transparent'
+                                    }}>
+                                    {t}
+                                </span>
+                            )
+                        })}
+                    </div>
+                    <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your meditative message..." style={{ width: '100%', height: '70px', borderRadius: '10px', padding: '10px', background: '#111', color: '#fff', border: 'none', fontSize: '1rem' }} />
+                </div>
+
+                {/* 4. TWO GRIDS */}
+                <div style={{ display: 'flex', gap: '15px', marginTop: '15px' }}>
+                    <div>
+                        <p style={{ fontSize: '0.6rem', color: '#fff', textAlign: 'center' }}>CLEAN</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '5px' }}>
+                            {CLEAN_SCENES.map(s => (
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '30px', height: '30px', borderRadius: '5px', background: selectedScene.id === s.id ? '#0070f3' : '#333', color: '#fff', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>{s.label}</button>
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <p style={{ fontSize: '0.6rem', color: '#fff', textAlign: 'center' }}>ARTISTIC</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '5px' }}>
+                            {ART_SCENES.map(s => (
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '30px', height: '30px', borderRadius: '5px', background: selectedScene.id === s.id ? '#0070f3' : '#333', color: '#fff', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>{s.label}</button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* 5. ACTIONS */}
+                <div style={{ display: 'flex', gap: '15px', marginTop: '20px' }}>
+                    <button onClick={handlePreview} style={{ padding: '12px 25px', borderRadius: '25px', background: '#fff', color: '#000', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>PREVIEW</button>
+                    {/* Placeholder for real SEND link */}
+                    <button onClick={() => alert("Stripe documents pending—ready for live test tomorrow!")} style={{ padding: '12px 25px', borderRadius: '25px', background: '#0070f3', color: '#fff', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>SEND (0.99¢)</button>
+                </div>
+                <input type="range" min="0.1" max="1" step="0.1" value={dimness} onChange={(e) => setDimness(parseFloat(e.target.value))} style={{ width: '150px', marginTop: '10px' }} />
+            </div>
+        </main>
+    );
+}
