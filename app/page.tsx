@@ -43,6 +43,7 @@ export default function HomePage() {
                         ))}
                     </div>
                 </div>
+                // Vibe Launch Final
 
                 {/* GRID 2: THE AWAKENING */}
                 <div style={{ marginBottom: '40px', textAlign: 'center' }}>
