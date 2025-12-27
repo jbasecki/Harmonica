@@ -5,7 +5,7 @@ export default function ReceiverPage() {
     const [isUnfolded, setIsUnfolded] = useState(false);
     const [timeLeft, setTimeLeft] = useState(3600); // 60 minutes in seconds
 
-    // Simple countdown logic
+    // This handles the ticking clock once the vault is opened
     useEffect(() => {
         if (!isUnfolded) return;
         const timer = setInterval(() => {
@@ -23,6 +23,7 @@ export default function ReceiverPage() {
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', fontFamily: 'sans-serif' }}>
             {!isUnfolded ? (
+                /* THE VAULT VIEW */
                 <div onClick={() => setIsUnfolded(true)} style={{ cursor: 'pointer' }}>
                     <img 
                         src="https://storage.googleapis.com/simple-bucket-27/gold-vault-final.png" 
@@ -32,19 +33,29 @@ export default function ReceiverPage() {
                     <h2 style={{ color: 'gold', marginTop: '20px' }}>TAP TO UNFOLD</h2>
                 </div>
             ) : (
+                /* THE UNFOLDED VIEW WITH INCENTIVE */
                 <div style={{ padding: '20px' }}>
                     <h1 style={{ color: 'white', fontSize: '2.5rem' }}>Your Vibe has Unfolded.</h1>
                     
                     <div style={{ marginTop: '30px', border: '1px solid gold', padding: '20px', borderRadius: '15px', background: 'rgba(255,215,0,0.1)' }}>
                         <h3 style={{ color: 'gold', margin: '0' }}>EARLY BIRD BONUS</h3>
-                        <p style={{ color: '#ccc' }}>Respond within the next hour to send your next Vibe for FREE!</p>
+                        <p style={{ color: '#ccc' }}>Feeling the peace? Respond within the next hour to send your next Vibe for FREE!</p>
                         <h2 style={{ color: 'white', fontSize: '2rem' }}>{formatTime(timeLeft)}</h2>
                         
                         <button 
                             onClick={() => window.location.href = '/'} 
-                            style={{ marginTop: '15px', background: 'gold', color: 'black', padding: '12px 25px', borderRadius: '25px', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}
+                            style={{ 
+                                marginTop: '15px', 
+                                background: 'gold', 
+                                color: 'black', 
+                                padding: '15px 30px', 
+                                borderRadius: '30px', 
+                                fontWeight: 'bold', 
+                                border: 'none', 
+                                cursor: 'pointer' 
+                            }}
                         >
-                            CLAIM MY FREE VIBE
+                            SEND A VIBE BACK
                         </button>
                     </div>
                 </div>
