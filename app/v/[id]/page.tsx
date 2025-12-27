@@ -1,12 +1,11 @@
 'use client';
 import React, { useState } from 'react';
 
-export default function ReceiverPage({ params }: { params: { id: string } }) {
-    // In a full version, we'd fetch the message using the 'id'
+export default function ReceiverPage() {
     const [isUnfolded, setIsUnfolded] = useState(false);
-    const [isMuted, setIsMuted] = useState(false);
+    const [isMuted, setIsMuted] = useState(true);
 
-    // Placeholder data - this will eventually come from your database
+    // Dynamic ID placeholder
     const selectedVideoId = "one"; 
     const senderMessage = "Your meditative vibe has arrived. Breathe in the winter.";
 
@@ -18,7 +17,6 @@ export default function ReceiverPage({ params }: { params: { id: string } }) {
                 autoPlay 
                 muted={isMuted} 
                 playsInline
-                /* Plays once and stays on the final frame for a movie feel */
                 style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}
             >
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedVideoId}.mp4`} type="video/mp4" />
@@ -28,7 +26,6 @@ export default function ReceiverPage({ params }: { params: { id: string } }) {
             <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.3)' }}>
                 
                 {!isUnfolded ? (
-                    /* THE INITIAL GIFT REVEAL */
                     <div onClick={() => setIsUnfolded(true)} style={{ cursor: 'pointer', textAlign: 'center' }}>
                         <img 
                             src="https://storage.googleapis.com/simple-bucket-27/gold-vault-final.png" 
@@ -38,8 +35,7 @@ export default function ReceiverPage({ params }: { params: { id: string } }) {
                         <h2 style={{ color: 'gold', marginTop: '20px', letterSpacing: '2px' }}>TAP TO UNFOLD</h2>
                     </div>
                 ) : (
-                    /* THE FINAL MESSAGE REVEAL */
-                    <div style={{ width: '85%', maxWidth: '600px', textAlign: 'center', animation: 'fadeIn 2s ease-in' }}>
+                    <div style={{ width: '85%', maxWidth: '600px', textAlign: 'center' }}>
                         <h1 style={{ color: '#fff', fontSize: '2.5rem', fontWeight: 'bold', textShadow: '2px 2px 10px rgba(0,0,0,0.8)' }}>
                             {senderMessage}
                         </h1>
@@ -53,13 +49,6 @@ export default function ReceiverPage({ params }: { params: { id: string } }) {
                     {isMuted ? '🔇' : '🔊'}
                 </button>
             </div>
-
-            <style jsx>{`
-                @keyframes fadeIn {
-                    from { opacity: 0; transform: translateY(20px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-            `}</style>
         </main>
     );
 }
