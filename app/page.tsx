@@ -10,67 +10,39 @@ export default function HomePage() {
 
     const videoUrl = (num: number) => `https://storage.googleapis.com/simple-bucket-27/${num}.mp4`;
 
-    return (
-        <main style={{ position: 'relative', height: '100vh', width: '100vw', overflow: 'hidden', background: '#000', fontFamily: 'sans-serif' }}>
-            
-            {/* LIVE BACKGROUND PREVIEW */}
-            <video 
-                key={selectedVideo}
-                autoPlay muted loop playsInline
-                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }}
-            >
-                <source src={videoUrl(selectedVideo)} type="video/mp4" />
-            </video>
+   return (
+    <main style={{ position: 'relative', height: '100vh', width: '100vw', overflow: 'hidden', background: '#000', fontFamily: 'sans-serif' }}>
+      
+      {/* LIVE BACKGROUND PREVIEW */}
+      <video
+        key={selectedVideo}
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }}
+      >
+        <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedVideo}.mp4`} type="video/mp4" />
+      </video>
 
-            {/* INTERFACE LAYER */}
-            <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', padding: '20px' }}>
-                
-                <h1 style={{ fontSize: '2.5rem', marginBottom: '10px', textShadow: '0 0 20px black' }}>STASH A VIBE</h1>
-                <p style={{ color: 'gold', marginBottom: '40px', fontWeight: 'bold' }}>New Year. New Energy. 2026.</p>
+      {/* OVERLAY CONTENT */}
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'white', background: 'rgba(0,0,0,0.4)' }}>
+        <h1 style={{ fontSize: '3rem', marginBottom: '10px', letterSpacing: '2px' }}>STASH A VIBE</h1>
+        <p style={{ color: 'gold', marginBottom: '40px' }}>New Year. New Energy. 2026.</p>
 
-                {/* GRID 1: THE CLEARING */}
-                <div style={{ marginBottom: '30px', textAlign: 'center' }}>
-                    <h3 style={{ color: '#888', letterSpacing: '2px', fontSize: '0.8rem', marginBottom: '15px' }}>GRID I: THE CLEARING</h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
-                        {grid1.map((num) => (
-                            <button 
-                                key={num}
-                                onMouseEnter={() => setSelectedVideo(num)}
-                                style={{ background: selectedVideo === num ? 'gold' : 'rgba(255,255,255,0.1)', color: selectedVideo === num ? 'black' : 'white', border: '1px solid rgba(255,255,255,0.2)', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', transition: '0.3s' }}
-                            >
-                                {num}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-                // Vibe Launch Final
+        {/* GRIDS - Ensure your grid arrays are defined above this return */}
+        {/* ... keep your existing grid mapping here ... */}
 
-                {/* GRID 2: THE AWAKENING */}
-                <div style={{ marginBottom: '40px', textAlign: 'center' }}>
-                    <h3 style={{ color: '#888', letterSpacing: '2px', fontSize: '0.8rem', marginBottom: '15px' }}>GRID II: THE AWAKENING</h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
-                        {grid2.map((num) => (
-                            <button 
-                                key={num}
-                                onMouseEnter={() => setSelectedVideo(num)}
-                                style={{ background: selectedVideo === num ? 'gold' : 'rgba(255,255,255,0.1)', color: selectedVideo === num ? 'black' : 'white', border: '1px solid rgba(255,255,255,0.2)', padding: '10px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', transition: '0.3s' }}
-                            >
-                                {num}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-// Launch Version 1.1
-                {/* THE "SEND" BUTTON */}
-                <button 
-                    onClick={() => window.location.href = 'https://buy.stripe.com/28EfZi4qU8hn4kj73ofnO04
-
-'} 
-                    style={{ background: 'gold', color: 'black', padding: '15px 40px', borderRadius: '30px', fontSize: '1.2rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px gold' }}
-                >
-                    SEND VIBE {selectedVideo} ($0.99)
-                </button>
-            </div>
-        </main>
-    );
+        {/* THE "SEND" BUTTON WITH YOUR NEW 004 URL */}
+        <div style={{ marginTop: '30px' }}>
+          <button 
+            onClick={() => window.location.href = 'https://buy.stripe.com/4gM14obTmgNT9ED2N8fn004'} 
+            style={{ background: 'gold', color: 'black', padding: '15px 40px', borderRadius: '30px', fontSize: '1.2rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px gold' }}
+          >
+            SEND VIBE {selectedVideo} ($0.99)
+          </button>
+        </div>
+      </div>
+    </main>
+  );
 }
