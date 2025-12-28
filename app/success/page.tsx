@@ -4,22 +4,21 @@ import { useSearchParams } from 'next/navigation';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
-  const vibeId = searchParams.get('vibe') || '1'; 
+  const vibeId = searchParams.get('vibe') || '14'; 
   
   const [line1, setLine1] = useState('');
   const [line2, setLine2] = useState('');
+  const [name, setName] = useState(''); // NEW SIGNATURE STATE
   const [copied, setCopied] = useState(false);
 
   const handleStashAndCopy = () => {
     const baseUrl = window.location.origin;
-    const harmonicaLink = `${baseUrl}/open?vibe=${vibeId}&l1=${encodeURIComponent(line1)}&l2=${encodeURIComponent(line2)}`;
+    // THE FINAL LINK: VIDEO ID + LINE 1 + LINE 2 + SIGNATURE
+    const harmonicaLink = `${baseUrl}/open?vibe=${vibeId}&l1=${encodeURIComponent(line1)}&l2=${encodeURIComponent(line2)}&from=${encodeURIComponent(name)}`;
     
-    // Copies the link for your records
     navigator.clipboard.writeText(harmonicaLink);
     setCopied(true);
-
-    // IMMEDIATELY OPENS THE GIFT SO YOU SEE IT UNFOLD
-    window.open(harmonicaLink, '_blank');
+    window.open(harmonicaLink, '_blank'); // AUTO-OPEN
   };
 
   return (
@@ -36,6 +35,12 @@ function SuccessContent() {
       <input 
         type="text" placeholder="Line 2: Alphabet Logic"
         value={line2} onChange={(e) => setLine2(e.target.value)}
+        style={{ width: '100%', padding: '15px', borderRadius: '10px', background: '#111', border: '1px solid #333', color: 'white', marginBottom: '15px' }}
+      />
+
+      <input 
+        type="text" placeholder="Your Signature (e.g., JOANNE)"
+        value={name} onChange={(e) => setName(e.target.value)}
         style={{ width: '100%', padding: '15px', borderRadius: '10px', background: '#111', border: '1px solid #333', color: 'white', marginBottom: '30px' }}
       />
 
