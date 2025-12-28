@@ -5,81 +5,66 @@ import { useSearchParams } from 'next/navigation';
 function HarmonicaContent() {
   const searchParams = useSearchParams();
   const [unfolded, setUnfolded] = useState(false);
-  const [showReply, setShowReply] = useState(false);
+  const [showText, setShowText] = useState(false);
   
-  const line1 = searchParams.get('l1') || '';
-  const line2 = searchParams.get('l2') || '';
-  const from = searchParams.get('from') || 'A FRIEND'; 
-  const vibeId = searchParams.get('vibe') || '15'; // Using your latest Vibe 15 as default
+  const message = searchParams.get('msg') || "";
+  const sceneId = searchParams.get('vibe') || '14';
+  const tilesStr = searchParams.get('tiles') || "";
+  const from = searchParams.get('from') || 'A Friend';
+  const selectedTiles = tilesStr ? tilesStr.split(',') : [];
+
+  const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
 
   useEffect(() => {
     if (unfolded) {
-      const timer = setTimeout(() => setShowReply(true), 4000);
+      const timer = setTimeout(() => setShowText(true), 3000);
       return () => clearTimeout(timer);
     }
   }, [unfolded]);
 
   return (
-    <main style={{ position: 'relative', height: '100vh', width: '100vw', overflow: 'hidden', background: '#000', fontFamily: 'sans-serif' }}>
-      <video key={vibeId} autoPlay loop muted playsInline style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }}>
-        <source src={`https://storage.googleapis.com/simple-bucket-27/${vibeId}.mp4`} type="video/mp4" />
+    <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
+      <video key={sceneId} autoPlay loop muted playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', opacity: unfolded ? 0.5 : 0.2, transition: 'opacity 2s' }}>
+        <source src={`https://storage.googleapis.com/simple-bucket-27/${sceneId}.mp4`} type="video/mp4" />
       </video>
 
-      <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', background: 'rgba(0,0,0,0.3)' }}>
-        <div 
-          onClick={() => !unfolded && setUnfolded(true)}
-          style={{ 
-            border: '2px solid gold', padding: '50px', borderRadius: '25px', 
-            background: 'rgba(0,0,0,0.9)', textAlign: 'center', 
-            cursor: unfolded ? 'default' : 'pointer',
-            boxShadow: unfolded ? '0 0 60px gold' : '0 0 20px gold',
-            transition: 'all 1.5s cubic-bezier(0.4, 0, 0.2, 1)', maxWidth: '500px', width: '90%'
-          }}
-        >
-          {!unfolded ? (
-            <h2 style={{ color: 'gold', fontSize: '1.2rem', letterSpacing: '6px', fontWeight: 'lighter' }}>CLICK TO UNFOLD</h2>
-          ) : (
-            <div style={{ animation: 'revealHarmonica 2.5s ease-out' }}>
-              <p style={{ color: 'gold', fontSize: '0.7rem', letterSpacing: '3px', marginBottom: '25px', opacity: 0.7 }}>STASHED BY {from}</p>
-              
-              {/* THE GOLDEN ALPHABET LOGIC */}
-              <div className="golden-vibes">
-                <p style={{ margin: '10px 0', fontSize: '2.5rem', fontWeight: '900', letterSpacing: '4px', textTransform: 'uppercase' }}>{line1}</p>
-                <p style={{ margin: '10px 0', fontSize: '2.5rem', fontWeight: '900', letterSpacing: '4px', textTransform: 'uppercase' }}>{line2}</p>
-              </div>
-              
-              <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid rgba(255,215,0,0.3)', opacity: showReply ? 1 : 0, transition: 'opacity 1.5s ease' }}>
-                <button 
-                  onClick={() => window.location.href = '/?reply=true'}
-                  style={{ background: 'none', border: '1px solid gold', color: 'gold', padding: '12px 30px', borderRadius: '25px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold', letterSpacing: '1px' }}
-                >
-                  REPLY FOR FREE
-                </button>
-              </div>
+      <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        
+        {!unfolded ? (
+          // THE BRAND IMAGE: THE BLUE BOX
+          <div onClick={() => setUnfolded(true)} style={{ cursor: 'pointer', textAlign: 'center', animation: 'float 3s ease-in-out infinite' }}>
+            <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '200px', filter: 'drop-shadow(0 0 30px #0070f3)' }} />
+            <p style={{ color: 'gold', marginTop: '20px', letterSpacing: '4px', fontSize: '0.8rem' }}>CLICK TO OPEN HARMONICA</p>
+          </div>
+        ) : (
+          // THE ENCHANTED REVEAL
+          <div style={{ width: '90%', maxWidth: '800px', textAlign: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '40px', animation: 'fadeIn 2s' }}>
+              {selectedTiles.map((tile, idx) => (
+                <div key={idx} style={{ display: 'flex', gap: '2px', border: '1px solid gold', padding: '5px', borderRadius: '5px', background: 'rgba(0,0,0,0.6)', boxShadow: '0 0 20px gold' }}>
+                  <img src={getLetterUrl(tile[0])} style={{ width: '50px' }} />
+                  <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '50px' }} />
+                </div>
+              ))}
             </div>
-          )}
-        </div>
+            
+            <div style={{ opacity: showText ? 1 : 0, transition: 'opacity 2s', background: 'rgba(0,0,0,0.7)', padding: '40px', borderRadius: '30px', border: '1px solid gold' }}>
+              <p style={{ color: 'white', fontSize: '1.4rem', lineHeight: '1.6', marginBottom: '20px' }}>{message}</p>
+              <p style={{ color: 'gold', fontSize: '0.9rem' }}>— {from}</p>
+              <button onClick={() => window.location.href='/?reply=true'} style={{ marginTop: '30px', background: 'none', border: '1px solid gold', color: 'gold', padding: '10px 20px', borderRadius: '20px', cursor: 'pointer' }}>REPLY FOR FREE</button>
+            </div>
+          </div>
+        )}
       </div>
+
       <style jsx>{`
-        @keyframes revealHarmonica {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .golden-vibes p {
-          background: linear-gradient(to bottom, #fff7ad 0%, #ffa700 50%, #fff7ad 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          filter: drop-shadow(0 0 10px rgba(255,215,0,0.5));
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
     </main>
   );
 }
 
 export default function OpenPage() {
-  return (
-    <Suspense fallback={<div style={{color: 'gold', background: '#000', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>UNFOLDING THE VAULT...</div>}>
-      <HarmonicaContent />
-    </Suspense>
-  );
+  return <Suspense><HarmonicaContent /></Suspense>;
 }
