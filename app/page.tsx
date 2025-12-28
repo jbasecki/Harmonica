@@ -28,9 +28,18 @@ function HomeContent() {
         <h1 style={{ fontSize: '2.5rem', marginBottom: '5px', letterSpacing: '2px' }}>{isReply ? 'REPLY TO VIBE' : 'STASH A VIBE'}</h1>
         <p style={{ color: 'gold', fontSize: '0.9rem', marginBottom: '30px' }}>{isReply ? 'Your reply is free.' : 'New Year. New Energy. 2026.'}</p>
 
-        {/* ALPHABET PICKER (The 19 Tiles) */}
+        {/* RESTORED GRID I TITLES */}
+        <p style={{ fontSize: '0.7rem', opacity: 0.6, marginBottom: '10px', letterSpacing: '1px' }}>GRID I: THE CLEARING</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px', marginBottom: '20px' }}>
+          {grid1.map((num) => (
+            <button key={num} onMouseEnter={() => setSelectedVideo(num)} style={{ width: '40px', height: '40px', borderRadius: '5px', border: '1px solid rgba(255,255,255,0.3)', background: selectedVideo === num ? 'gold' : 'rgba(255,255,255,0.1)', color: selectedVideo === num ? 'black' : 'white', cursor: 'pointer' }}>{num}</button>
+          ))}
+        </div>
+
+        {/* RESTORED GRID II TITLES */}
+        <p style={{ fontSize: '0.7rem', opacity: 0.6, marginBottom: '10px', letterSpacing: '1px' }}>GRID II: THE AWAKENING</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px', marginBottom: '30px' }}>
-          {[...grid1, ...grid2].map((num) => (
+          {grid2.map((num) => (
             <button key={num} onMouseEnter={() => setSelectedVideo(num)} style={{ width: '40px', height: '40px', borderRadius: '5px', border: '1px solid rgba(255,255,255,0.3)', background: selectedVideo === num ? 'gold' : 'rgba(255,255,255,0.1)', color: selectedVideo === num ? 'black' : 'white', cursor: 'pointer' }}>{num}</button>
           ))}
         </div>
@@ -45,7 +54,7 @@ function HomeContent() {
 
 export default function Home() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading Vault...</div>}>
       <HomeContent />
     </Suspense>
   );
