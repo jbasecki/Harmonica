@@ -11,12 +11,12 @@ function HarmonicaContent() {
   const line1 = searchParams.get('l1') || 'STASHED VIBE';
   const line2 = searchParams.get('l2') || '2026';
   const from = searchParams.get('from') || 'A FRIEND'; 
-  const vibeId = searchParams.get('vibe') || '14'; // Fallback to 14 only if URL is missing data
+  const vibeId = searchParams.get('vibe') || '14'; 
 
-  // The Reveal Delay: Force a 4-second pause to experience the "Clearing"
+  // The Reveal Delay: After clicking, wait 3 seconds to show the reply button
   useEffect(() => {
     if (unfolded) {
-      const timer = setTimeout(() => setShowReply(true), 4000);
+      const timer = setTimeout(() => setShowReply(true), 3000);
       return () => clearTimeout(timer);
     }
   }, [unfolded]);
@@ -46,7 +46,6 @@ function HarmonicaContent() {
               <p style={{ color: 'white', fontSize: '2.2rem', fontWeight: 'bold', textTransform: 'uppercase', margin: '5px 0' }}>{line1}</p>
               <p style={{ color: 'white', fontSize: '2.2rem', fontWeight: 'bold', textTransform: 'uppercase', margin: '5px 0' }}>{line2}</p>
               
-              {/* This section reveals only after the 4-second "Clearing" period */}
               <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid rgba(255,215,0,0.3)', opacity: showReply ? 1 : 0, transition: 'opacity 1.5s ease' }}>
                 <button 
                   onClick={() => window.location.href = '/?reply=true'}
