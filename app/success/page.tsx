@@ -2,13 +2,11 @@
 import React, { useState, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-// 1. This sub-component handles the data and the UI
 function SuccessContent() {
   const searchParams = useSearchParams();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isMuted, setIsMuted] = useState(true);
 
-  // Retrieve your "HAPPY SUNNY MONDAY" data
   const word1 = searchParams.get('word1') || 'HAPPY';
   const word2 = searchParams.get('word2') || 'SUNNY';
   const word3 = searchParams.get('word3') || 'MONDAY';
@@ -26,43 +24,60 @@ function SuccessContent() {
   };
 
   return (
-    <main style={{ position: 'relative', minHeight: '100vh', background: '#000', overflow: 'hidden' }}>
-      {/* Visual Sanctuary: Rainforest (ID 14) */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        style={{ position: 'fixed', width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
-      >
+    <main style={{ position: 'relative', minHeight: '100vh', background: '#000', overflow: 'hidden', fontFamily: 'serif' }}>
+      {/* 1. LOAD CURSIVE FONT */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+        .cursive { font-family: 'Great Vibes', cursive; }
+        .word-tile { 
+          border: 1px solid gold; 
+          padding: 20px 15px; 
+          border-radius: 10px; 
+          min-width: 80px; 
+          text-align: center;
+          background: rgba(0,0,0,0.3);
+        }
+      `}</style>
+
+      {/* 2. BACKGROUND VIDEO */}
+      <video autoPlay muted loop playsInline style={{ position: 'fixed', width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}>
         <source src="https://storage.googleapis.com/simple-bucket-27/14.mp4" type="video/mp4" />
       </video>
 
-      {/* Audio Layer */}
       <audio ref={audioRef} loop muted src="https://storage.googleapis.com/simple-bucket-27/audio/ambient.mp3" />
 
-      {/* Metaphor Overlay */}
-      <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', paddingTop: '10vh', color: 'gold' }}>
-        <p style={{ letterSpacing: '4px', fontSize: '0.8rem', marginBottom: '40px' }}>
+      {/* 3. FORMATTED CONTENT */}
+      <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', paddingTop: '12vh', color: 'gold' }}>
+        <p style={{ letterSpacing: '6px', fontSize: '0.7rem', marginBottom: '60px', opacity: 0.9 }}>
           A HARMONICA COMPOSED OF MEANINGFUL WORDS
         </p>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', fontSize: '2rem', fontWeight: 'bold' }}>
-          <span>{word1}</span>
-          <span>{word2}</span>
-          <span>{word3}</span>
+        {/* SPACING FIXED: Words now separate */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '80px' }}>
+          <div className="word-tile">
+            <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{word1}</div>
+          </div>
+          <div className="word-tile">
+            <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{word2}</div>
+          </div>
+          <div className="word-tile">
+            <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{word3}</div>
+          </div>
         </div>
 
-        <div style={{ marginTop: '60px' }}>
-          <p style={{ fontStyle: 'italic', marginBottom: '10px' }}>signed,</p>
-          <h1 style={{ fontSize: '3.5rem' }}>{signature}</h1>
+        <div style={{ marginTop: '40px' }}>
+          <p style={{ fontStyle: 'italic', marginBottom: '0px', opacity: 0.8 }}>signed,</p>
+          {/* CURSIVE RESTORED */}
+          <h1 className="cursive" style={{ fontSize: '4.5rem', marginTop: '0px', color: 'gold' }}>
+            {signature}
+          </h1>
         </div>
       </div>
 
-      {/* Control: Fixed Bottom Right */}
+      {/* 4. MUTE TOGGLE */}
       <button 
         onClick={handleToggleMute}
-        style={{ position: 'fixed', bottom: '30px', right: '30px', zIndex: 10, background: 'rgba(0,0,0,0.6)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}
+        style={{ position: 'fixed', bottom: '30px', right: '30px', zIndex: 10, background: 'rgba(0,0,0,0.6)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer', fontSize: '0.8rem', letterSpacing: '1px' }}
       >
         {isMuted ? 'UNMUTE SANCTUARY' : 'MUTE SANCTUARY'}
       </button>
@@ -70,10 +85,9 @@ function SuccessContent() {
   );
 }
 
-// 2. The Main Export MUST wrap the content in Suspense to fix the Vercel error
 export default function SuccessPage() {
   return (
-    <Suspense fallback={<div style={{ background: '#000', color: 'gold', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Sanctuary...</div>}>
+    <Suspense fallback={<div style={{ background: '#000', height: '100vh' }} />}>
       <SuccessContent />
     </Suspense>
   );
