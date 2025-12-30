@@ -1,19 +1,20 @@
 'use client';
 import React, { useState } from 'react';
 
+// VERIFIED IDs: MATCHING YOUR GOOGLE BUCKET EXACTLY
 const vibes = [
   { id: '14', name: 'Rainforest Sanctuary' },
   { id: '19', name: 'The Golden Clearing' },
   { id: '10', name: 'Misty Peak' },
-  { id: '09', name: 'Solar Bloom' },
-  { id: '01', name: 'Midnight Stash' },
-  { id: '02', name: 'Ethereal Dawn' },
-  { id: '03', name: 'Golden Cognition' },
-  { id: '04', name: 'Velvet Silence' },
-  { id: '05', name: 'Amber Echo' },
-  { id: '06', name: 'Stardust Archive' },
-  { id: '07', name: 'Celestial Harmony' },
-  { id: '08', name: 'Lunar Drift' },
+  { id: '9', name: 'Solar Bloom' },   
+  { id: '1', name: 'Midnight Stash' }, 
+  { id: '2', name: 'Ethereal Dawn' },
+  { id: '3', name: 'Golden Cognition' },
+  { id: '4', name: 'Velvet Silence' },
+  { id: '5', name: 'Amber Echo' },
+  { id: '6', name: 'Stardust Archive' },
+  { id: '7', name: 'Celestial Harmony' },
+  { id: '8', name: 'Lunar Drift' },
   { id: '11', name: 'Winter Night' },
   { id: '12', name: 'Oceanic Breath' },
   { id: '13', name: 'Enchanted Gold' },
@@ -35,6 +36,7 @@ export default function LandingPage() {
 
   return (
     <main style={{ minHeight: '100vh', background: '#000', color: 'white', padding: '40px 20px' }}>
+      {/* GIFTING PROTOCOL */}
       <section style={{ maxWidth: '900px', margin: '0 auto 60px', padding: '30px', borderBottom: '1px solid rgba(255,215,0,0.3)' }}>
         <h2 style={{ color: 'gold', textAlign: 'center', letterSpacing: '6px', fontSize: '1.1rem', marginBottom: '25px' }}>HOW TO GIFT A HARMONICA</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', textAlign: 'center', fontSize: '0.8rem', color: '#bbb' }}>
@@ -45,11 +47,15 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* MAIN CONTENT */}
       <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
         <h1 style={{ color: 'gold', fontSize: '2.5rem', letterSpacing: '12px', marginBottom: '10px' }}>HARMONICA</h1>
         <p style={{ color: '#888', marginBottom: '40px', letterSpacing: '2px' }}>A Sanctuary for Stashed Cognition</p>
+        
+        {/* THE SLIDER */}
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <button onClick={prevVibe} style={{ background: 'none', border: 'none', color: 'gold', fontSize: '4rem', cursor: 'pointer', padding: '20px' }}>‹</button>
+          
           <div style={{ width: '100%', height: '500px', borderRadius: '50px', overflow: 'hidden', border: '2px solid gold', position: 'relative' }}>
             <video key={vibes[currentIndex].id} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }}>
               <source src={`https://storage.googleapis.com/simple-bucket-27/${vibes[currentIndex].id}.mp4`} type="video/mp4" />
@@ -58,10 +64,9 @@ export default function LandingPage() {
               <p style={{ color: 'gold', letterSpacing: '5px', fontWeight: 'bold', textShadow: '2px 2px 8px black', fontSize: '1.2rem' }}>{vibes[currentIndex].name.toUpperCase()}</p>
             </div>
           </div>
+          
           <button onClick={nextVibe} style={{ background: 'none', border: 'none', color: 'gold', fontSize: '4rem', cursor: 'pointer', padding: '20px' }}>›</button>
         </div>
-        <button onClick={handlePayAndEnter} style={{ marginTop: '50px', background: 'gold', color: 'black', padding: '18px 60px', borderRadius: '40px', fontWeight: 'bold', cursor: 'pointer', fontSize: '1.1rem', border: 'none' }}>CONFIRM SELECTION & ENTER</button>
-      </div>
-    </main>
-  );
-}
+
+        {/* STRIPE BUTTON */}
+        <button onClick={handlePayAndEnter} style={{ marginTop: '50px', background: 'gold', color: 'black', padding: '18px 60px', borderRadius: '40px', fontWeight: 'bold', cursor: 'pointer', fontSize: '1.1rem', border: '
