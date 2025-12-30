@@ -12,7 +12,6 @@ function SuccessContent() {
       <video autoPlay loop muted playsInline style={{ position: 'fixed', width: '100%', height: '100%', objectFit: 'cover', zIndex: -1, opacity: 0.5 }}>
         <source src={`https://storage.googleapis.com/simple-bucket-27/${vibeId}.mp4`} type="video/mp4" />
       </video>
-
       <div style={{ textAlign: 'center', zIndex: 1 }}>
         <p style={{ color: 'gold', fontSize: '0.8rem', letterSpacing: '4px', marginBottom: '25px', fontWeight: 'bold' }}>A HARMONICA COMPOSED OF MEANINGFUL WORDS</p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
