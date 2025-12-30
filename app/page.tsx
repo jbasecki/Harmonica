@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 
-// VERIFIED IDs: MATCHING YOUR GOOGLE BUCKET EXACTLY
+// VERIFIED IDs: MATCHING YOUR GOOGLE BUCKET FILENAMES (e.g., 1.mp4, 9.mp4)
 const vibes = [
   { id: '14', name: 'Rainforest Sanctuary' },
   { id: '19', name: 'The Golden Clearing' },
@@ -26,10 +26,12 @@ const vibes = [
 
 export default function LandingPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const nextVibe = () => setCurrentIndex((prev) => (prev + 1) % vibes.length);
   const prevVibe = () => setCurrentIndex((prev) => (prev - 1 + vibes.length) % vibes.length);
 
   const handlePayAndEnter = () => {
+    // Branded Stripe Link
     const stripeUrl = "https://buy.stripe.com/aFaaEYf5ybtzg3173ofnO08";
     window.location.href = `${stripeUrl}?client_reference_id=${vibes[currentIndex].id}`;
   };
@@ -69,4 +71,8 @@ export default function LandingPage() {
         </div>
 
         {/* STRIPE BUTTON */}
-        <button onClick={handlePayAndEnter} style={{ marginTop: '50px', background: 'gold', color: 'black', padding: '18px 60px', borderRadius: '40px', fontWeight: 'bold', cursor: 'pointer', fontSize: '1.1rem', border: '
+        <button onClick={handlePayAndEnter} style={{ marginTop: '50px', background: 'gold', color: 'black', padding: '18px 60px', borderRadius: '40px', fontWeight: 'bold', cursor: 'pointer', fontSize: '1.1rem', border: 'none' }}>CONFIRM SELECTION & ENTER</button>
+      </div>
+    </main>
+  );
+}
