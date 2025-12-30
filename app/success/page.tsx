@@ -74,16 +74,11 @@ function SuccessContent() {
         </div>
       </div>
 
-      {/* 4. MUTE TOGGLE */}
-      <button 
-        onClick={handleToggleMute}
-        style={{ position: 'fixed', bottom: '30px', right: '30px', zIndex: 10, background: 'rgba(0,0,0,0.6)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer', fontSize: '0.8rem', letterSpacing: '1px' }}
-      >
-        {isMuted ? 'UNMUTE SANCTUARY' : 'MUTE SANCTUARY'}
-      </button>
-    </main>
-  );
-}
+     <audio 
+  ref={audioRef} 
+  loop 
+  src="https://storage.googleapis.com/simple-bucket-27/ambient.mp3" 
+/>
 
 export default function SuccessPage() {
   return (
