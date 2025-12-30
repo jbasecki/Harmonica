@@ -3,7 +3,6 @@ import React, { useState, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Great_Vibes } from 'next/font/google';
 
-// Official Next.js font setup to fix the Vercel Build Error
 const greatVibes = Great_Vibes({ 
   weight: '400',
   subsets: ['latin'],
@@ -15,7 +14,6 @@ function SuccessContent() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isMuted, setIsMuted] = useState(true);
 
-  // Get data from URL or use high-fidelity defaults
   const word1 = searchParams.get('word1') || 'HAPPY';
   const word2 = searchParams.get('word2') || 'SUNNY';
   const word3 = searchParams.get('word3') || 'MONDAY';
@@ -47,26 +45,12 @@ function SuccessContent() {
 
   return (
     <main style={{ position: 'relative', minHeight: '100vh', background: '#000', overflow: 'hidden' }}>
-      {/* Background Video (ID 14 - Rainforest) */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
-      >
+      <video autoPlay muted loop playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}>
         <source src="https://storage.googleapis.com/simple-bucket-27/14.mp4" type="video/mp4" />
       </video>
 
-      {/* Bird Ambience Audio */}
-      <audio 
-        ref={audioRef} 
-        loop 
-        muted={isMuted}
-        src="https://storage.googleapis.com/simple-bucket-27/ambient.mp3" 
-      />
+      <audio ref={audioRef} loop muted={isMuted} src="https://storage.googleapis.com/simple-bucket-27/ambient.mp3" />
 
-      {/* Content Overlay */}
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', textAlign: 'center' }}>
         <div style={{ display: 'flex', gap: '20px', marginBottom: '40px' }}>
           {[word1, word2, word3].map((w, i) => (
@@ -75,27 +59,11 @@ function SuccessContent() {
             </div>
           ))}
         </div>
-
         <p style={{ color: 'white', fontSize: '1.2rem', marginBottom: '10px' }}>signed,</p>
-        <h1 className={greatVibes.className} style={{ color: 'gold', fontSize: '5rem', marginTop: 0 }}>
-          {signature}
-        </h1>
+        <h1 className={greatVibes.className} style={{ color: 'gold', fontSize: '5rem', marginTop: 0 }}>{signature}</h1>
       </div>
-<div style={{ position: 'fixed', bottom: '30px', left: '30px', display: 'flex', gap: '15px', zIndex: 10 }}>
-        <button onClick={handleToggleMute} style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}>
-          {isMuted ? 'UNMUTE SANCTUARY' : 'MUTE SANCTUARY'}
-        </button>
-        <button onClick={handleShare} style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}>
-          SHARE
-        </button>
-        <button 
-          onClick={() => window.location.href = 'https://harmonica.design'}
-          style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}
-        >
-          REPLY WITH A METAPHOR
-        </button>
-      </div>
-      {/* Controls */}
+
+      {/* FIXED BUTTON LAYOUT - ALL THREE BUTTONS INSIDE THE MAIN DIV */}
       <div style={{ position: 'fixed', bottom: '30px', left: '30px', display: 'flex', gap: '15px', zIndex: 10 }}>
         <button onClick={handleToggleMute} style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}>
           {isMuted ? 'UNMUTE SANCTUARY' : 'MUTE SANCTUARY'}
@@ -103,18 +71,18 @@ function SuccessContent() {
         <button onClick={handleShare} style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}>
           SHARE
         </button>
+        <button onClick={() => window.location.href = 'https://harmonica.design'} style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}>
+          REPLY WITH A METAPHOR
+        </button>
       </div>
     </main>
   );
 }
-// Add this inside your return() block, next to the SHARE button
-<button 
-  onClick={() => window.location.href = 'https://harmonica.design'}
-  style={{ 
-    background: 'rgba(255,215,0,0.2)', 
-    color: 'gold', 
-    border: '1px solid gold', 
-    padding: '12px 24px', 
-    borderRadius: '30px', 
-    cursor: 'pointer' 
-  }}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<div style={{ color: 'gold', background: 'black', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Sanctuary...</div>}>
+      <SuccessContent />
+    </Suspense>
+  );
+}
