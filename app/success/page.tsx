@@ -30,7 +30,7 @@ function SenderContent() {
   return (
     <main style={{ minHeight: '100vh', background: '#000', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px' }}>
       
-      {/* RESTORED: YOUR BEAUTIFUL ALPHABET TILES */}
+      {/* RESTORED ALPHABET TILES */}
       <div style={{ display: 'flex', gap: '15px', marginBottom: '50px', justifyContent: 'center', flexWrap: 'wrap' }}>
         {stashedWords.map((word, i) => (
           <div key={i} style={{ display: 'flex', gap: '5px', border: '1.5px solid gold', padding: '10px', borderRadius: '12px' }}>
