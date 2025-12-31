@@ -58,28 +58,44 @@ function SenderContent() {
           })}
         </div>
 
-        <textarea placeholder="Compose..." value={message} onChange={(e) => setMessage(e.target.value)} style={{ width: '100%', height: '140px', background: 'transparent', border: 'none', color: 'white', fontSize: '1.2rem', outline: 'none', resize: 'none' }} />
+       {/* THE TEXTAREA */}
+<textarea 
+  placeholder="Compose..." 
+  value={message} 
+  onChange={(e) => setMessage(e.target.value)} 
+  style={{ width: '100%', height: '140px', background: 'transparent', border: 'none', color: 'white', fontSize: '1.2rem', outline: 'none', resize: 'none' }} 
+/>
 
-        {/* THE TIP */}
-        {message.length > 5 && stashedWords.length === 0 && (
-          <p style={{ color: '#888', fontSize: '0.75rem', position: 'absolute', bottom: '90px', left: '35px', fontStyle: 'italic' }}>
-            Tip: Tap your words above to stash them into the golden reveal...
-          </p>
-        )}
+{/* THE TIP (Only shows if typing but no tiles yet) */}
+{message.length > 5 && stashedWords.length === 0 && (
+  <p style={{ color: '#888', fontSize: '0.75rem', position: 'absolute', bottom: '85px', left: '35px', fontStyle: 'italic', pointerEvents: 'none' }}>
+    Tip: Tap your words above to stash them into the golden reveal...
+  </p>
+)}
 
-        {/* THE [i] INFO ICON */}
-        <div title="Words of meditative meaning are formed by association with visual abstracts..." style={{ position: 'absolute', bottom: '75px', right: '25px', color: '#888', border: '1px solid #555', borderRadius: '4px', padding: '1px 5px', fontSize: '0.65rem', cursor: 'help' }}>[i]</div>
+{/* THE [i] INFO ICON - Restored and Positioned */}
+<div 
+  title="Words of meditative meaning are formed by association with visual abstracts rather than specific symbols seen in text." 
+  style={{ 
+    position: 'absolute', 
+    bottom: '75px', 
+    right: '25px', 
+    color: '#888', 
+    border: '1px solid #555', 
+    borderRadius: '4px', 
+    padding: '0px 5px', 
+    fontSize: '0.65rem', 
+    cursor: 'help',
+    zIndex: 20 
+  }}
+>
+  i
+</div>
 
-        <input placeholder="Signature" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', background: 'transparent', borderTop: '1px solid #333', padding: '15px 0', color: 'gold', textAlign: 'center', outline: 'none' }} />
-      </div>
-
-      <button onClick={handleStashAndCopy} style={{ marginTop: '50px', background: 'gold', color: 'black', padding: '18px 60px', borderRadius: '45px', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>
-        PRODUCE & OPEN HARMONICA
-      </button>
-    </main>
-  );
-}
-
-export default function SuccessPage() {
-  return <Suspense fallback={<div>Preparing...</div>}><SenderContent /></Suspense>;
-}
+{/* THE SIGNATURE LINE */}
+<input 
+  placeholder="Signature" 
+  value={name} 
+  onChange={(e) => setName(e.target.value)} 
+  style={{ width: '100%', background: 'transparent', borderTop: '1px solid #333', padding: '15px 0', color: 'gold', textAlign: 'center', outline: 'none' }} 
+/>
