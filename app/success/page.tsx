@@ -21,6 +21,7 @@ function SenderContent() {
 
   const handleStashAndCopy = () => {
     const baseUrl = window.location.origin;
+    // This bridge ensures the "Open" page receives the right data
     const link = `${baseUrl}/open?vibe=${vibeId}&msg=${encodeURIComponent(message)}&tiles=${stashedWords.join(',')}&from=${encodeURIComponent(name)}`;
     navigator.clipboard.writeText(link);
     window.open(link, '_blank');
@@ -42,7 +43,7 @@ function SenderContent() {
           value={message} 
           onChange={(e) => setMessage(e.target.value)}
           onBlur={(e) => e.target.value.split(" ").forEach(toggleWord)}
-          style={{ background: 'transparent', color: 'white', border: '1px solid #222', width: '100%', height: '180px', padding: '25px', borderRadius: '20px', fontSize: '1.3rem' }}
+          style={{ background: 'transparent', color: 'white', border: '1px solid #222', width: '100%', height: '180px', padding: '25px', borderRadius: '20px', fontSize: '1.3rem', outline: 'none' }}
         />
         <input 
           placeholder="SIGNATURE" 
@@ -52,7 +53,7 @@ function SenderContent() {
         />
         <button 
           onClick={handleStashAndCopy}
-          style={{ marginTop: '70px', background: '#fbbf24', color: 'black', padding: '22px 50px', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer', border: 'none', width: '100%' }}
+          style={{ marginTop: '70px', background: '#fbbf24', color: 'black', padding: '22px 50px', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer', border: 'none', width: '100%', fontSize: '1rem', letterSpacing: '2px' }}
         >
           PRODUCE & OPEN HARMONICA
         </button>
@@ -62,5 +63,9 @@ function SenderContent() {
 }
 
 export default function SuccessPage() {
-  return <Suspense fallback={<div style={{background:'#000', height:'100vh'}}></div>}><SenderContent /></Suspense>;
+  return (
+    <Suspense fallback={<div style={{background:'#000', height:'100vh'}}></div>}>
+      <SenderContent />
+    </Suspense>
+  );
 }
