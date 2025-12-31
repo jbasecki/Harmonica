@@ -21,7 +21,6 @@ function SenderContent() {
 
   const handleStashAndCopy = () => {
     const baseUrl = window.location.origin;
-    // CRITICAL: We pass &vibe=${vibeId} here to keep the background persistent
     const link = `${baseUrl}/open?vibe=${vibeId}&msg=${encodeURIComponent(message)}&tiles=${stashedWords.join(',')}&from=${encodeURIComponent(name)}`;
     navigator.clipboard.writeText(link);
     window.open(link, '_blank');
@@ -30,7 +29,6 @@ function SenderContent() {
   return (
     <main style={{ minHeight: '100vh', background: '#000', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px' }}>
       
-      {/* HARMONICA PREVIEW */}
       <div style={{ width: '100%', maxWidth: '900px', textAlign: 'center', marginBottom: '50px' }}>
         <p style={{ color: 'gold', fontSize: '0.7rem', letterSpacing: '4px', marginBottom: '30px', opacity: 0.6 }}>HARMONICA PREVIEW</p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', minHeight: '120px', overflowX: 'auto' }}>
@@ -46,7 +44,6 @@ function SenderContent() {
         </div>
       </div>
 
-      {/* THE DESK CONTAINER */}
       <div style={{ width: '100%', maxWidth: '650px', background: 'rgba(30,0,0,0.4)', padding: '35px', borderRadius: '35px', border: '1px solid gold', position: 'relative' }}>
         <div style={{ marginBottom: '25px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
           {message.split(/\s+/).map((word, i) => {
@@ -61,16 +58,15 @@ function SenderContent() {
 
         <textarea placeholder="Compose..." value={message} onChange={(e) => setMessage(e.target.value)} style={{ width: '100%', height: '140px', background: 'transparent', border: 'none', color: 'white', fontSize: '1.2rem', outline: 'none', resize: 'none' }} />
 
-        {/* THE TIP */}
         {message.length > 5 && stashedWords.length === 0 && (
           <p style={{ color: '#888', fontSize: '0.75rem', position: 'absolute', bottom: '85px', left: '35px', fontStyle: 'italic', pointerEvents: 'none' }}>
             Tip: Tap your words above to stash them into the golden reveal...
           </p>
         )}
 
-        {/* THE [i] INFO ICON RESTORED */}
+        {/* UPDATED [i] ICON WITH YOUR SPECIFIC PHILOSOPHY */}
         <div 
-          title="Words of meditative meaning are formed by association with visual abstracts..." 
+          title="Words of meditative meaning are formed by association with visual abstracts rather than specific symbols seen in text." 
           style={{ position: 'absolute', bottom: '75px', right: '25px', color: '#888', border: '1px solid #555', borderRadius: '4px', padding: '0px 5px', fontSize: '0.65rem', cursor: 'help', zIndex: 20 }}
         >
           i
