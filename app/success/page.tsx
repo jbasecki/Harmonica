@@ -21,7 +21,9 @@ function SenderContent() {
 
   const handleStashAndCopy = () => {
     const baseUrl = window.location.origin;
+    // The persistence bridge: vibe=${vibeId} is now locked in
     const link = `${baseUrl}/open?vibe=${vibeId}&msg=${encodeURIComponent(message)}&tiles=${stashedWords.join(',')}&from=${encodeURIComponent(name)}`;
+    
     navigator.clipboard.writeText(link);
     window.open(link, '_blank');
   };
