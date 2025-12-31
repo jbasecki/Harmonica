@@ -6,12 +6,11 @@ function OpenContent() {
   const searchParams = useSearchParams();
   const [unfolded, setUnfolded] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   
-  // THE PERSISTENCE LOCK: No safety default here, force the URL choice
-  const vibeParam = searchParams.get('vibe'); 
-  const sceneId = vibeParam ? vibeParam : '14'; 
-  
+  // THE PERSISTENCE LOCK
+  const sceneId = searchParams.get('vibe') || '14'; 
   const message = searchParams.get('msg') || "";
   const tilesStr = searchParams.get('tiles') || "";
   const from = searchParams.get('from') || 'A Friend';
@@ -19,10 +18,16 @@ function OpenContent() {
 
   const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
 
+  // FORCE VIDEO REFRESH: This kills the 'mystery' of the leaf
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load(); // Forces the player to look at the new sceneId immediately
+    }
+  }, [sceneId]);
+
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.muted = isMuted;
-      audioRef.current.volume = 1.0;
       if (!isMuted) audioRef.current.play().catch(() => {});
     }
   }, [isMuted]);
@@ -30,8 +35,9 @@ function OpenContent() {
   return (
     <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden' }}>
       
-      {/* THE KEY: Forces a total refresh to whatever 'sceneId' is */}
+      {/* THE DYNAMIC VIDEO PLAYER */}
       <video 
+        ref={videoRef}
         key={sceneId} 
         autoPlay 
         loop 
@@ -76,11 +82,8 @@ function OpenContent() {
               <p style={{ color: 'white', fontSize: '1.4rem' }}>{message}</p>
               <p style={{ color: 'gold', marginTop: '25px', fontWeight: 'bold' }}>— {from.toUpperCase()}</p>
             </div>
-            
-            <button 
-              onClick={() => window.location.href = '/'}
-              style={{ marginTop: '50px', background: 'transparent', border: '1px solid gold', color: 'gold', padding: '15px 40px', borderRadius: '30px', cursor: 'pointer', fontWeight: 'bold', letterSpacing: '2px' }}
-            >
+
+            <button onClick={() => window.location.href = '/'} style={{ marginTop: '50px', background: 'transparent', border: '1px solid gold', color: 'gold', padding: '15px 40px', borderRadius: '30px', cursor: 'pointer', fontWeight: 'bold' }}>
               REPLY
             </button>
           </div>
