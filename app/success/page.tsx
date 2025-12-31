@@ -30,7 +30,7 @@ function SenderContent() {
   return (
     <main style={{ minHeight: '100vh', background: '#000', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px' }}>
       
-      {/* RESTORED ALPHABET TILES */}
+      {/* RESTORED: YOUR BEAUTIFUL ALPHABET TILES */}
       <div style={{ display: 'flex', gap: '15px', marginBottom: '50px', justifyContent: 'center', flexWrap: 'wrap' }}>
         {stashedWords.map((word, i) => (
           <div key={i} style={{ display: 'flex', gap: '5px', border: '1.5px solid gold', padding: '10px', borderRadius: '12px' }}>
@@ -46,7 +46,7 @@ function SenderContent() {
           value={message} 
           onChange={(e) => setMessage(e.target.value)}
           onBlur={(e) => e.target.value.split(" ").forEach(toggleWord)}
-          style={{ background: 'transparent', color: 'white', border: '1px solid #222', width: '100%', height: '180px', padding: '25px', borderRadius: '20px', fontSize: '1.3rem' }}
+          style={{ background: 'transparent', color: 'white', border: '1px solid #222', width: '100%', height: '180px', padding: '25px', borderRadius: '20px', fontSize: '1.3rem', outline: 'none' }}
         />
         
         <input 
@@ -58,7 +58,7 @@ function SenderContent() {
 
         <button 
           onClick={handleStashAndCopy}
-          style={{ marginTop: '70px', background: '#fbbf24', color: 'black', padding: '22px 50px', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer', border: 'none', width: '100%' }}
+          style={{ marginTop: '70px', background: '#fbbf24', color: 'black', padding: '22px 50px', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer', border: 'none', width: '100%', fontSize: '1rem', letterSpacing: '2px' }}
         >
           PRODUCE & OPEN HARMONICA
         </button>
@@ -69,7 +69,7 @@ function SenderContent() {
 
 export default function SuccessPage() {
   return (
-    <Suspense fallback={<div style={{color:'white'}}>Loading Harmonica...</div>}>
+    <Suspense fallback={<div style={{background:'#000', height:'100vh'}}></div>}>
       <SenderContent />
     </Suspense>
   );
