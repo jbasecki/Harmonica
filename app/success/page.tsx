@@ -19,14 +19,14 @@ function SenderContent() {
     );
   };
 
-  const handleStashAndCopy = () => {
+const handleStashAndCopy = () => {
     const baseUrl = window.location.origin;
-    // THE PERSISTENCE BRIDGE
+    // THE PERSISTENCE BRIDGE: Ensuring the vibeId is attached to the link
     const link = `${baseUrl}/open?vibe=${vibeId}&msg=${encodeURIComponent(message)}&tiles=${stashedWords.join(',')}&from=${encodeURIComponent(name)}`;
+    
     navigator.clipboard.writeText(link);
     window.open(link, '_blank');
   };
-
   return (
     <main style={{ minHeight: '100vh', background: '#000', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px' }}>
       
