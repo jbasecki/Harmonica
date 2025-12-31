@@ -8,7 +8,7 @@ function OpenContent() {
   const [isMuted, setIsMuted] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
   
-  // IMMEDIATELY LOCKING THE VIBE
+  // IMMEDIATELY LOCKING THE VIBE FROM THE URL
   const message = searchParams.get('msg') || "";
   const sceneId = searchParams.get('vibe') || '14'; 
   const tilesStr = searchParams.get('tiles') || "";
@@ -28,7 +28,7 @@ function OpenContent() {
   return (
     <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden' }}>
       
-      {/* PERSISTENCE FIX: key={sceneId} forces the chosen video to load even before unfolding */}
+      {/* THE FIX: key={sceneId} forces the video to refresh to the chosen vibe */}
       <video 
         key={sceneId} 
         autoPlay 
@@ -54,20 +54,7 @@ function OpenContent() {
           <div style={{ textAlign: 'center' }}>
             <div 
               onClick={() => {setUnfolded(true); setIsMuted(false);}} 
-              style={{ 
-                cursor: 'pointer', 
-                width: '140px', 
-                height: '140px', 
-                background: 'radial-gradient(circle, #fff7ad 0%, #ffa700 70%)', 
-                borderRadius: '50%', 
-                margin: '0 auto 30px', 
-                boxShadow: '0 0 60px #ffa700', 
-                border: '2px solid white', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                animation: 'pulse 3s infinite'
-              }}
+              style={{ cursor: 'pointer', width: '140px', height: '140px', background: 'radial-gradient(circle, #fff7ad 0%, #ffa700 70%)', borderRadius: '50%', margin: '0 auto 30px', boxShadow: '0 0 60px #ffa700', border: '2px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse 3s infinite' }}
             >
                <p style={{color: 'black', fontWeight: 'bold', letterSpacing: '2px'}}>UNFOLD</p>
             </div>
@@ -97,7 +84,7 @@ function OpenContent() {
               <p style={{ color: 'white', fontSize: '1.4rem' }}>{message}</p>
               <p style={{ color: 'gold', marginTop: '25px', fontWeight: 'bold' }}>— {from.toUpperCase()}</p>
               
-              <div title="Words of meditative meaning are formed by association with visual abstracts rather than specific symbols seen in text." style={{ position: 'absolute', bottom: '15px', right: '15px', color: '#888', border: '1px solid #555', borderRadius: '4px', padding: '0px 5px', fontSize: '0.65rem', cursor: 'help' }}>i</div>
+              <div title="Words of meditative meaning..." style={{ position: 'absolute', bottom: '15px', right: '15px', color: '#888', border: '1px solid #555', borderRadius: '4px', padding: '0px 5px', fontSize: '0.65rem', cursor: 'help' }}>i</div>
             </div>
 
             <button onClick={() => window.location.href = '/'} style={{ marginTop: '50px', background: 'transparent', border: '1px solid gold', color: 'gold', padding: '15px 40px', borderRadius: '30px', cursor: 'pointer', fontWeight: 'bold' }}>
@@ -106,9 +93,7 @@ function OpenContent() {
           </div>
         )}
       </div>
-      <style jsx>{`
-        @keyframes pulse { 0% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.9; } }
-      `}</style>
+      <style jsx>{` @keyframes pulse { 0% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.9; } } `}</style>
     </main>
   );
 }
