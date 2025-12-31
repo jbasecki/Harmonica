@@ -8,7 +8,7 @@ function OpenContent() {
   const [isMuted, setIsMuted] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
   
-  // THE BRIDGE: Immediate extraction of the chosen video ID
+  // IMMEDIATELY LOCKING THE VIBE
   const message = searchParams.get('msg') || "";
   const sceneId = searchParams.get('vibe') || '14'; 
   const tilesStr = searchParams.get('tiles') || "";
@@ -28,7 +28,7 @@ function OpenContent() {
   return (
     <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden' }}>
       
-      {/* THE PERSISTENT BACKGROUND: This now loads 'sceneId' immediately */}
+      {/* PERSISTENCE FIX: key={sceneId} forces the chosen video to load even before unfolding */}
       <video 
         key={sceneId} 
         autoPlay 
@@ -40,8 +40,8 @@ function OpenContent() {
           width: '100%', 
           height: '100%', 
           objectFit: 'cover', 
-          opacity: unfolded ? 0.6 : 0.4, // Slight dimming before unfold to make orb pop
-          transition: 'opacity 2s ease-in-out' 
+          opacity: unfolded ? 0.6 : 0.4,
+          transition: 'opacity 2s ease-in-out'
         }}
       >
         <source src={`https://storage.googleapis.com/simple-bucket-27/${sceneId}.mp4`} type="video/mp4" />
@@ -52,7 +52,6 @@ function OpenContent() {
       <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         {!unfolded ? (
           <div style={{ textAlign: 'center' }}>
-            {/* THE GOLDEN ORB: Clicking this triggers unfold AND sound */}
             <div 
               onClick={() => {setUnfolded(true); setIsMuted(false);}} 
               style={{ 
@@ -77,9 +76,9 @@ function OpenContent() {
             </button>
           </div>
         ) : (
-          <div style={{ width: '95%', textAlign: 'center', position: 'relative', animation: 'fadeIn 1.5s' }}>
+          <div style={{ width: '95%', textAlign: 'center', position: 'relative' }}>
             <h2 style={{ color: 'gold', letterSpacing: '4px', fontSize: '0.8rem', marginBottom: '40px' }}>
-                A HARMONICA COMPOSED OF MEANINGFUL WORDS
+              A HARMONICA COMPOSED OF MEANINGFUL WORDS
             </h2>
             
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '60px', overflowX: 'auto' }}>
@@ -95,10 +94,10 @@ function OpenContent() {
             </div>
 
             <div style={{ background: 'rgba(30,0,0,0.85)', padding: '40px', borderRadius: '35px', border: '1px solid gold', maxWidth: '700px', margin: '0 auto', position: 'relative' }}>
-              <p style={{ color: 'white', fontSize: '1.4rem', lineHeight: '1.6' }}>{message}</p>
+              <p style={{ color: 'white', fontSize: '1.4rem' }}>{message}</p>
               <p style={{ color: 'gold', marginTop: '25px', fontWeight: 'bold' }}>— {from.toUpperCase()}</p>
               
-              <div title="..." style={{ position: 'absolute', bottom: '15px', right: '15px', color: '#888', border: '1px solid #555', borderRadius: '4px', padding: '0px 5px', fontSize: '0.65rem', cursor: 'help' }}>i</div>
+              <div title="Words of meditative meaning are formed by association with visual abstracts rather than specific symbols seen in text." style={{ position: 'absolute', bottom: '15px', right: '15px', color: '#888', border: '1px solid #555', borderRadius: '4px', padding: '0px 5px', fontSize: '0.65rem', cursor: 'help' }}>i</div>
             </div>
 
             <button onClick={() => window.location.href = '/'} style={{ marginTop: '50px', background: 'transparent', border: '1px solid gold', color: 'gold', padding: '15px 40px', borderRadius: '30px', cursor: 'pointer', fontWeight: 'bold' }}>
@@ -109,7 +108,6 @@ function OpenContent() {
       </div>
       <style jsx>{`
         @keyframes pulse { 0% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.9; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
       `}</style>
     </main>
   );
