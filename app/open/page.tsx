@@ -8,7 +8,7 @@ function OpenContent() {
   const [isMuted, setIsMuted] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
   
-  // IMMEDIATELY LOCKING THE VIBE FROM THE URL
+  // IMMEDIATELY LOCKING THE VIBE
   const message = searchParams.get('msg') || "";
   const sceneId = searchParams.get('vibe') || '14'; 
   const tilesStr = searchParams.get('tiles') || "";
@@ -28,7 +28,7 @@ function OpenContent() {
   return (
     <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden' }}>
       
-      {/* THE FIX: key={sceneId} forces the video to refresh to the chosen vibe */}
+      {/* THE PERSISTENCE KEY: This forces the leaf to disappear if sceneId is not 14 */}
       <video 
         key={sceneId} 
         autoPlay 
@@ -58,9 +58,6 @@ function OpenContent() {
             >
                <p style={{color: 'black', fontWeight: 'bold', letterSpacing: '2px'}}>UNFOLD</p>
             </div>
-            <button onClick={() => setIsMuted(!isMuted)} style={{ background: 'rgba(0,0,0,0.5)', border: '1px solid gold', color: 'gold', padding: '10px 20px', borderRadius: '25px', cursor: 'pointer', fontSize: '0.7rem' }}>
-               {isMuted ? 'UNMUTE' : 'AUDIO ON'}
-            </button>
           </div>
         ) : (
           <div style={{ width: '95%', textAlign: 'center', position: 'relative' }}>
@@ -68,6 +65,7 @@ function OpenContent() {
               A HARMONICA COMPOSED OF MEANINGFUL WORDS
             </h2>
             
+            {/* TILES AND MESSAGE UI */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '60px', overflowX: 'auto' }}>
               {selectedTiles.map((tile, idx) => (
                 <div key={idx} style={{ flex: '0 0 auto' }}>
@@ -83,13 +81,7 @@ function OpenContent() {
             <div style={{ background: 'rgba(30,0,0,0.85)', padding: '40px', borderRadius: '35px', border: '1px solid gold', maxWidth: '700px', margin: '0 auto', position: 'relative' }}>
               <p style={{ color: 'white', fontSize: '1.4rem' }}>{message}</p>
               <p style={{ color: 'gold', marginTop: '25px', fontWeight: 'bold' }}>— {from.toUpperCase()}</p>
-              
-              <div title="Words of meditative meaning..." style={{ position: 'absolute', bottom: '15px', right: '15px', color: '#888', border: '1px solid #555', borderRadius: '4px', padding: '0px 5px', fontSize: '0.65rem', cursor: 'help' }}>i</div>
             </div>
-
-            <button onClick={() => window.location.href = '/'} style={{ marginTop: '50px', background: 'transparent', border: '1px solid gold', color: 'gold', padding: '15px 40px', borderRadius: '30px', cursor: 'pointer', fontWeight: 'bold' }}>
-              REPLY
-            </button>
           </div>
         )}
       </div>
