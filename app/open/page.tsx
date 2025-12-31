@@ -7,10 +7,10 @@ function OpenContent() {
   const [unfolded, setUnfolded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   
-  // THE STRICT LOCK: We remove the '|| 14' so it cannot default back to the leaf
+  // THE STRICT PERSISTENCE LOCK: Removing the '|| 14' default
   const vibeParam = searchParams.get('vibe'); 
   const sceneId = vibeParam; 
-  
+
   const message = searchParams.get('msg') || "";
   const tilesStr = searchParams.get('tiles') || "";
   const from = searchParams.get('from') || 'A Friend';
@@ -18,17 +18,17 @@ function OpenContent() {
 
   const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
 
-  // THE REFRESH TRIGGER: Forces the player to stay on the chosen ID
+  // FORCE REFRESH: Tells the browser to abandon the 'leaf' cache
   useEffect(() => {
     if (videoRef.current && sceneId) {
-      videoRef.current.load(); 
+      videoRef.current.load();
     }
   }, [sceneId]);
 
   return (
     <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden' }}>
       
-      {/* THE FORCED VIDEO PLAYER: No default source. It only plays what the URL says. */}
+      {/* THE FORCED VIDEO PLAYER: Only loads if a vibe is present in the URL */}
       {sceneId && (
         <video 
           ref={videoRef}
@@ -50,15 +50,13 @@ function OpenContent() {
           </div>
         ) : (
           <div style={{ width: '95%', textAlign: 'center' }}>
-            <h2 style={{ color: 'gold', letterSpacing: '4px', fontSize: '0.8rem', marginBottom: '40px' }}>
-                A HARMONICA COMPOSED OF MEANINGFUL WORDS
-            </h2>
+            <h2 style={{ color: 'gold', letterSpacing: '4px', fontSize: '0.8rem', marginBottom: '40px' }}>A HARMONICA COMPOSED OF MEANINGFUL WORDS</h2>
             
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '60px' }}>
               {selectedTiles.map((tile, idx) => (
                 <div key={idx} style={{ display: 'flex', gap: '4px', border: '1.5px solid gold', padding: '8px', borderRadius: '12px', background: 'rgba(0,0,0,0.8)' }}>
-                  <img src={getLetterUrl(tile[0])} style={{ width: '60px' }} alt="tile" />
-                  <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '60px' }} alt="tile" />
+                  <img src={getLetterUrl(tile[0])} style={{ width: '50px' }} alt="tile" />
+                  <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '50px' }} alt="tile" />
                 </div>
               ))}
             </div>
